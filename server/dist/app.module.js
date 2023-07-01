@@ -11,7 +11,7 @@ const common_1 = require("@nestjs/common");
 const graphql_1 = require("@nestjs/graphql");
 const apollo_1 = require("@nestjs/apollo");
 const tokens_module_1 = require("./tokens/tokens.module");
-const post_module_1 = require("./posts/post.module");
+const posts_module_1 = require("./posts/posts.module");
 let AppModule = exports.AppModule = class AppModule {
 };
 exports.AppModule = AppModule = __decorate([
@@ -22,7 +22,7 @@ exports.AppModule = AppModule = __decorate([
                 autoSchemaFile: 'schema.gql',
             }),
             tokens_module_1.default,
-            post_module_1.default,
+            posts_module_1.default,
         ],
         controllers: [],
         providers: [],

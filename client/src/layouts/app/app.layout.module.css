@@ -1,0 +1,7 @@
+.main {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 500px;
+  grid-template-rows: minmax(100vh, 1fr);
+  place-content: center;
+}

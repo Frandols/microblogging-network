@@ -24,16 +24,14 @@ let UsersService = class UsersService {
     }
     async upsert(token) {
         const gitHubUser = await this.getGitHubAPIUser(token);
-        const user = await this.prisma.user.upsert({
+        await this.prisma.user.upsert({
             where: { id: gitHubUser.id },
-            update: { name: gitHubUser.login, avatar: gitHubUser.avatar_url },
+            update: { name: gitHubUser.login },
             create: {
                 id: gitHubUser.id,
                 name: gitHubUser.login,
-                avatar: gitHubUser.avatar_url,
             },
         });
-        return user;
     }
 };
 UsersService = __decorate([

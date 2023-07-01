@@ -8,32 +8,44 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const graphql_1 = require("@nestjs/graphql");
 const posts_service_1 = require("./posts.service");
 const post_model_1 = require("./models/post.model");
+const create_post_input_1 = require("./dto/create-post.input");
+const common_1 = require("@nestjs/common");
+const auth_guard_1 = require("../auth/auth.guard");
+const get_posts_args_1 = require("./dto/get-posts.args");
+const get_posts_output_1 = require("./dto/get-posts.output");
 let PostsResolver = class PostsResolver {
     constructor(postsService) {
         this.postsService = postsService;
     }
-    async createPost() {
-        console.log('holis');
-        return { id: 0, content: 'hola' };
+    async createPost(createPostInput, req) {
+        return this.postsService.create(req.token, createPostInput);
     }
-    async getPosts() {
-        return this.postsService.findMany();
+    async getPosts(getPostsArgs) {
+        const result = await this.postsService.findMany(getPostsArgs.parentId);
+        return result;
     }
 };
 __decorate([
     (0, graphql_1.Mutation)(() => post_model_1.default),
+    (0, common_1.UseGuards)(auth_guard_1.default),
+    __param(0, (0, graphql_1.Args)('createPostInput')),
+    __param(1, (0, graphql_1.Context)('req')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [create_post_input_1.default, Object]),
     __metadata("design:returntype", Promise)
 ], PostsResolver.prototype, "createPost", null);
 __decorate([
-    (0, graphql_1.Query)(() => [post_model_1.default]),
+    (0, graphql_1.Query)(() => get_posts_output_1.default),
+    __param(0, (0, graphql_1.Args)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [get_posts_args_1.default]),
     __metadata("design:returntype", Promise)
 ], PostsResolver.prototype, "getPosts", null);
 PostsResolver = __decorate([
@@ -41,4 +53,4 @@ PostsResolver = __decorate([
     __metadata("design:paramtypes", [posts_service_1.default])
 ], PostsResolver);
 exports.default = PostsResolver;
-//# sourceMappingURL=post.resolver.js.map
+//# sourceMappingURL=posts.resolver.js.map

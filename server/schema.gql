@@ -2,16 +2,35 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+"""user"""
+type User {
+  id: Float!
+  name: String!
+}
+
 """post"""
 type Post {
-  id: ID!
+  id: Float!
   content: String!
+  user: User
+  parent: Post
+  children: [Post!]!
+}
+
+type GetPostsOutput {
+  parent: Post
+  children: [Post!]!
 }
 
 type Query {
-  getPosts: [Post!]!
+  getPosts(parentId: Int): GetPostsOutput!
 }
 
 type Mutation {
-  createPost: Post!
+  createPost(createPostInput: CreatePostInput!): Post!
+}
+
+input CreatePostInput {
+  content: String!
+  parentId: Int
 }

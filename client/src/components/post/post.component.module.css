@@ -1,0 +1,21 @@
+.post {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  grid-template-rows: 1fr;
+  padding: 0 1rem;
+  gap: 1rem;
+}
+
+.post img {
+  border-radius: 1rem;
+}
+
+.postBody header,
+.postBody main {
+  line-height: 1.5rem;
+}
+
+.postBody footer {
+  height: 1.5rem;
+}

@@ -8,10 +8,6 @@ export default class UsersService {
     private readonly prisma;
     constructor(prisma: PrismaService);
     getGitHubAPIUser(token: string): Promise<GitHubAPIUserResponse>;
-    upsert(token: string): Promise<import("@prisma/client/runtime").GetResult<{
-        id: number;
-        name: string;
-        avatar: string;
-    }, unknown> & {}>;
+    upsert(token: string): Promise<void>;
 }
 export {};
