@@ -19,7 +19,6 @@ const create_post_input_1 = require("./dto/create-post.input");
 const common_1 = require("@nestjs/common");
 const auth_guard_1 = require("../auth/auth.guard");
 const get_posts_args_1 = require("./dto/get-posts.args");
-const get_posts_output_1 = require("./dto/get-posts.output");
 let PostsResolver = class PostsResolver {
     constructor(postsService) {
         this.postsService = postsService;
@@ -28,8 +27,7 @@ let PostsResolver = class PostsResolver {
         return this.postsService.create(req.token, createPostInput);
     }
     async getPosts(getPostsArgs) {
-        const result = await this.postsService.findMany(getPostsArgs.parentId);
-        return result;
+        return this.postsService.findMany(getPostsArgs.parentId);
     }
 };
 __decorate([
@@ -42,7 +40,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], PostsResolver.prototype, "createPost", null);
 __decorate([
-    (0, graphql_1.Query)(() => get_posts_output_1.default),
+    (0, graphql_1.Query)(() => [post_model_1.default]),
     __param(0, (0, graphql_1.Args)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [get_posts_args_1.default]),

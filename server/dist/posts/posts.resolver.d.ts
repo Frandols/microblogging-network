@@ -12,44 +12,15 @@ export default class PostsResolver {
         userId: number;
         parentId: number | null;
     }, unknown> & {}>;
-    getPosts(getPostsArgs: GetPostsArgs): Promise<{
-        parent: null;
-        children: ({
-            user: import("@prisma/client/runtime").GetResult<{
-                id: number;
-                name: string;
-            }, unknown> & {};
-        } & import("@prisma/client/runtime").GetResult<{
+    getPosts(getPostsArgs: GetPostsArgs): Promise<({
+        user: import("@prisma/client/runtime").GetResult<{
             id: number;
-            content: string;
-            userId: number;
-            parentId: number | null;
-        }, unknown> & {})[];
-    } | {
-        parent: {
-            id: number;
-            content: string;
-            user: import("@prisma/client/runtime").GetResult<{
-                id: number;
-                name: string;
-            }, unknown> & {};
-            parent: (import("@prisma/client/runtime").GetResult<{
-                id: number;
-                content: string;
-                userId: number;
-                parentId: number | null;
-            }, unknown> & {}) | null;
-        };
-        children: ({
-            user: import("@prisma/client/runtime").GetResult<{
-                id: number;
-                name: string;
-            }, unknown> & {};
-        } & import("@prisma/client/runtime").GetResult<{
-            id: number;
-            content: string;
-            userId: number;
-            parentId: number | null;
-        }, unknown> & {})[];
-    }>;
+            name: string;
+        }, unknown> & {};
+    } & import("@prisma/client/runtime").GetResult<{
+        id: number;
+        content: string;
+        userId: number;
+        parentId: number | null;
+    }, unknown> & {})[]>;
 }

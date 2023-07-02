@@ -16,7 +16,7 @@ const userContextInitialValues = {
   setToken: () => null,
 }
 
-const UserContext = createContext<UserContext>(userContextInitialValues)
+const userContext = createContext<UserContext>(userContextInitialValues)
 
 const UserContextProvider = ({ children }: PropsWithChildren) => {
   const [user, setUser] = useState<User | null>(null)
@@ -36,18 +36,18 @@ const UserContextProvider = ({ children }: PropsWithChildren) => {
   }
 
   return (
-    <UserContext.Provider
+    <userContext.Provider
       value={{
         user,
         setToken,
       }}
     >
       {children}
-    </UserContext.Provider>
+    </userContext.Provider>
   )
 }
 
-const useUserContext = () => useContext(UserContext)
+const useUserContext = () => useContext(userContext)
 
-export default UserContext
+export default userContext
 export { UserContextProvider, useUserContext }

@@ -5,7 +5,6 @@ import CreatePostInput from './dto/create-post.input'
 import { UseGuards } from '@nestjs/common'
 import AuthGuard from '../auth/auth.guard'
 import GetPostsArgs from './dto/get-posts.args'
-import GetPostsOutput from './dto/get-posts.output'
 
 @Resolver('Post')
 export default class PostsResolver {
@@ -20,10 +19,8 @@ export default class PostsResolver {
     return this.postsService.create(req.token, createPostInput)
   }
 
-  @Query(() => GetPostsOutput)
+  @Query(() => [Post])
   async getPosts(@Args() getPostsArgs: GetPostsArgs) {
-    const result = await this.postsService.findMany(getPostsArgs.parentId)
-
-    return result
+    return this.postsService.findMany(getPostsArgs.parentId)
   }
 }

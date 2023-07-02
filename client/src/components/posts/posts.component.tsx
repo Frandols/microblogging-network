@@ -1,22 +1,17 @@
 import Post from '../post/post.component'
+import { useParams } from 'react-router-dom'
 import { usePosts } from '../../hooks'
-import styles from './posts.component.module.css'
 
 const Posts = () => {
-  const { loading, posts } = usePosts()
+  const { postId } = useParams()
 
-  if (loading) return <div>Loading...</div>
+  const { loading, posts, error } = usePosts(postId || null)
 
-  const { parent, children } = posts
+  if (loading) return <h1>Loading</h1>
 
-  return (
-    <section className={styles.posts}>
-      {parent ? <Post {...parent} isParent /> : null}
-      {children.map((post) => (
-        <Post key={post.id} {...post} />
-      ))}
-    </section>
-  )
+  if (error) return <h1>Error!</h1>
+
+  return posts.map((post) => <Post key={post.id} {...post} />)
 }
 
 export default Posts

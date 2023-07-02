@@ -1,28 +1,36 @@
-import { useQuery } from '@apollo/client'
+import { ApolloError, useQuery } from '@apollo/client'
 import { getPosts } from '../queries'
-import GetPostsOutput from '@server/posts/dto/get-posts.output'
-import { useSearchParams } from 'react-router-dom'
+import PostModel from '@server/posts/models/post.model'
 
-const usePosts = () => {
-  const [searchParams] = useSearchParams()
-
-  const { loading, data } = useQuery<{ getPosts: GetPostsOutput }>(
-    getPosts(searchParams.get('post'))
-  ) as
-    | { loading: true; data: null }
-    | { loading: false; data: { getPosts: GetPostsOutput } }
-
-  if (loading) {
-    return {
-      loading,
-      posts: null,
+type UsePosts =
+  | {
+      loading: true
+      parentPost: null
+      posts: null
+      error: undefined
     }
-  }
+  | {
+      loading: false
+      parentPost: null
+      posts: null
+      error: ApolloError
+    }
+  | {
+      loading: false
+      posts: PostModel[]
+      error: undefined
+    }
+
+const usePosts = (parentId: string | null) => {
+  const { loading, data, error } = useQuery<{
+    getPosts: PostModel[]
+  }>(getPosts(parentId))
 
   return {
     loading,
-    posts: data.getPosts,
-  }
+    posts: data ? data.getPosts : null,
+    error,
+  } as UsePosts
 }
 
 export default usePosts

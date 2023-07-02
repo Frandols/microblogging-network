@@ -35,41 +35,12 @@ let PostsService = class PostsService {
         });
     }
     async findMany(parentId) {
-        if (!parentId) {
-            const children = await this.prisma.post.findMany({
-                where: { parentId: null },
-                include: {
-                    user: true,
-                },
-            });
-            return {
-                parent: null,
-                children,
-            };
-        }
-        const parent = await this.prisma.post.findUnique({
-            where: { id: parentId },
+        return this.prisma.post.findMany({
+            where: { parentId },
             include: {
                 user: true,
-                parent: true,
-                children: {
-                    include: {
-                        user: true,
-                    },
-                },
             },
         });
-        if (!parent)
-            throw new Error('Parent not found');
-        return {
-            parent: {
-                id: parent.id,
-                content: parent.content,
-                user: parent.user,
-                parent: parent.parent,
-            },
-            children: parent.children,
-        };
     }
 };
 PostsService = __decorate([

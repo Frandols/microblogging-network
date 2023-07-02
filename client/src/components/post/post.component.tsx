@@ -1,34 +1,35 @@
 import styles from './post.component.module.css'
 import PostModel from '@server/posts/models/post.model'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { usePostsContext } from '../../contexts'
 
-type PostProps = Pick<PostModel, 'id' | 'content' | 'user'> & {
-  isParent?: boolean
-}
+type PostProps = Pick<PostModel, 'id' | 'content' | 'user'>
 
-const Post = ({ id, content, user, isParent = false }: PostProps) => {
+const Post = (post: PostProps) => {
+  const navigate = useNavigate()
+  const { setParentPost } = usePostsContext()
+
   return (
     <article
       className={styles.post}
-      style={{
-        borderBottom: isParent ? '1px solid var(--light-gray)' : 'none',
+      onClick={() => {
+        setParentPost(post)
+        navigate(`/posts/${post.id}`)
       }}
     >
-      <Link to={`?post=${id}`}>
-        <img
-          src={`https://avatars.githubusercontent.com/u/${user.id}`}
-          alt={`${user.name} GitHub Avatar`}
-          width={64}
-          height={64}
-        />
-        <div className={styles.postBody}>
-          <header>
-            <Link to={`/users?user=${user.id}`}>{user.name}</Link>
-          </header>
-          <main>{content}</main>
-          <footer></footer>
-        </div>
-      </Link>
+      <img
+        src={`https://avatars.githubusercontent.com/u/${post.user.id}`}
+        alt={`${post.user.name} GitHub Avatar`}
+        width={40}
+        height={40}
+      />
+      <div className={styles.postBody}>
+        <header>
+          <Link to={`/users/${post.user.id}`}>{post.user.name}</Link>
+        </header>
+        <main>{post.content}</main>
+        <footer></footer>
+      </div>
     </article>
   )
 }

@@ -17,13 +17,8 @@ type Post {
   children: [Post!]!
 }
 
-type GetPostsOutput {
-  parent: Post
-  children: [Post!]!
-}
-
 type Query {
-  getPosts(parentId: Int): GetPostsOutput!
+  getPosts(parentId: Int): [Post!]!
 }
 
 type Mutation {
