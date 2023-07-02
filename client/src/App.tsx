@@ -2,7 +2,7 @@ import './App.css'
 import { useUserContext } from './contexts'
 import { useCodeDetection } from './hooks'
 import Posts from './components/posts/posts.component'
-import { AppLayout } from './layouts'
+import { Routes, Route, Navigate } from 'react-router-dom'
 
 function App() {
   /* useCodeDetection()
@@ -20,9 +20,11 @@ function App() {
   ) */
 
   return (
-    <AppLayout>
-      <Posts />
-    </AppLayout>
+    <Routes>
+      <Route path="/posts" element={<Posts />} />
+      <Route path="/users" element={<h1>Users</h1>} />
+      <Route path="*" element={<Navigate to="/posts" />} />
+    </Routes>
   )
 }
 

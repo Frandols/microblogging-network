@@ -5,11 +5,14 @@ import styles from './posts.component.module.css'
 const Posts = () => {
   const { loading, posts } = usePosts()
 
-  if (loading || !posts) return <div>Loading...</div>
+  if (loading) return <div>Loading...</div>
+
+  const { parent, children } = posts
 
   return (
     <section className={styles.posts}>
-      {posts.getPosts.children.map((post) => (
+      {parent ? <Post {...parent} isParent /> : null}
+      {children.map((post) => (
         <Post key={post.id} {...post} />
       ))}
     </section>

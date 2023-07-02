@@ -1,10 +1,23 @@
 .post {
   width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.post a {
+  width: 100%;
   display: grid;
   grid-template-columns: 64px 1fr;
   grid-template-rows: 1fr;
   padding: 0 1rem;
   gap: 1rem;
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.postComment a {
+  width: 90%;
 }
 
 .post img {
@@ -18,4 +31,18 @@
 
 .postBody footer {
   height: 1.5rem;
+}
+
+.postBody header {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.postBody header a {
+  width: auto;
+  padding: 0;
+}
+
+.postBody header a:hover {
+  text-decoration: underline;
 }
