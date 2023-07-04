@@ -26,7 +26,7 @@ function App() {
       <Route path="/posts" element={<PostsPage />}>
         <Route path="/posts/:postId" element={<PostPage />} />
       </Route>
-      <Route path="/users" element={<h1>Users</h1>} />
+      <Route path="/users/:userId" element={<h1>User</h1>} />
       <Route path="*" element={<Navigate to="/posts" />} />
     </Routes>
   )

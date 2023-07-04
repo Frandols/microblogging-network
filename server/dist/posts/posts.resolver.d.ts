@@ -9,6 +9,7 @@ export default class PostsResolver {
     }): Promise<import("@prisma/client/runtime").GetResult<{
         id: number;
         content: string;
+        updatedAt: Date;
         userId: number;
         parentId: number | null;
     }, unknown> & {}>;
@@ -17,9 +18,13 @@ export default class PostsResolver {
             id: number;
             name: string;
         }, unknown> & {};
+        _count: {
+            children: number;
+        };
     } & import("@prisma/client/runtime").GetResult<{
         id: number;
         content: string;
+        updatedAt: Date;
         userId: number;
         parentId: number | null;
     }, unknown> & {})[]>;

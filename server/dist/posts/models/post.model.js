@@ -12,6 +12,15 @@ var Post_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 const graphql_1 = require("@nestjs/graphql");
 const user_model_1 = require("../../users/models/user.model");
+let Count = class Count {
+};
+__decorate([
+    (0, graphql_1.Field)(),
+    __metadata("design:type", Number)
+], Count.prototype, "children", void 0);
+Count = __decorate([
+    (0, graphql_1.ObjectType)()
+], Count);
 let Post = Post_1 = class Post {
 };
 __decorate([
@@ -23,9 +32,13 @@ __decorate([
     __metadata("design:type", String)
 ], Post.prototype, "content", void 0);
 __decorate([
-    (0, graphql_1.Field)(() => user_model_1.default, { nullable: true }),
+    (0, graphql_1.Field)(() => user_model_1.default),
     __metadata("design:type", user_model_1.default)
 ], Post.prototype, "user", void 0);
+__decorate([
+    (0, graphql_1.Field)(() => Date),
+    __metadata("design:type", Date)
+], Post.prototype, "updatedAt", void 0);
 __decorate([
     (0, graphql_1.Field)(() => Post_1, { nullable: true }),
     __metadata("design:type", Post)
@@ -34,6 +47,10 @@ __decorate([
     (0, graphql_1.Field)(() => [Post_1]),
     __metadata("design:type", Array)
 ], Post.prototype, "children", void 0);
+__decorate([
+    (0, graphql_1.Field)(() => Count),
+    __metadata("design:type", Count)
+], Post.prototype, "_count", void 0);
 Post = Post_1 = __decorate([
     (0, graphql_1.ObjectType)({ description: 'post' })
 ], Post);

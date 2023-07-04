@@ -8,14 +8,25 @@ type User {
   name: String!
 }
 
+type Count {
+  children: Float!
+}
+
 """post"""
 type Post {
   id: Float!
   content: String!
-  user: User
+  user: User!
+  updatedAt: DateTime!
   parent: Post
   children: [Post!]!
+  _count: Count!
 }
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 type Query {
   getPosts(parentId: Int): [Post!]!

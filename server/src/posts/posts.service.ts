@@ -34,6 +34,9 @@ export default class PostsService {
       where: { parentId },
       include: {
         user: true,
+        _count: {
+          select: { children: true },
+        },
       },
     })
   }

@@ -11,19 +11,20 @@ datasource db {
 }
 
 model User {
-  id        Int     @id
+  id        Int       @id
   name      String
   posts     Post[]
 }
 
 model Post {
-  id        Int     @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   content   String
+  updatedAt DateTime  @updatedAt @default(now())
 
   userId    Int
-  user      User    @relation(fields: userId, references: id)
+  user      User      @relation(fields: userId, references: id)
 
   parentId  Int?
-  parent    Post?   @relation("postToPost", fields: parentId, references: id)
-  children  Post[]  @relation("postToPost")
+  parent    Post?     @relation("postToPost", fields: parentId, references: id)
+  children  Post[]    @relation("postToPost")
 }
