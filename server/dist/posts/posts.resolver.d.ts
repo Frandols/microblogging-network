@@ -1,6 +1,6 @@
 import PostsService from './posts.service';
 import CreatePostInput from './dto/create-post.input';
-import GetPostsArgs from './dto/get-posts.args';
+import GetPostArgs from './dto/get-post.args';
 export default class PostsResolver {
     private readonly postsService;
     constructor(postsService: PostsService);
@@ -13,7 +13,7 @@ export default class PostsResolver {
         userId: number;
         parentId: number | null;
     }, unknown> & {}>;
-    getPosts(getPostsArgs: GetPostsArgs): Promise<({
+    getPosts(): Promise<({
         user: import("@prisma/client/runtime").GetResult<{
             id: number;
             name: string;
@@ -28,4 +28,31 @@ export default class PostsResolver {
         userId: number;
         parentId: number | null;
     }, unknown> & {})[]>;
+    getPost(getPostArgs: GetPostArgs): Promise<({
+        user: import("@prisma/client/runtime").GetResult<{
+            id: number;
+            name: string;
+        }, unknown> & {};
+        children: ({
+            user: import("@prisma/client/runtime").GetResult<{
+                id: number;
+                name: string;
+            }, unknown> & {};
+            _count: {
+                children: number;
+            };
+        } & import("@prisma/client/runtime").GetResult<{
+            id: number;
+            content: string;
+            updatedAt: Date;
+            userId: number;
+            parentId: number | null;
+        }, unknown> & {})[];
+    } & import("@prisma/client/runtime").GetResult<{
+        id: number;
+        content: string;
+        updatedAt: Date;
+        userId: number;
+        parentId: number | null;
+    }, unknown> & {}) | null>;
 }

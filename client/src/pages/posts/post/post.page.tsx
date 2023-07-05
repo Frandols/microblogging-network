@@ -1,26 +1,29 @@
-import { usePostContext } from '../../../contexts/post.context'
 import styles from './post.page.module.css'
+import { useOutletContext } from 'react-router-dom'
+import PostModel from '@server/posts/models/post.model'
+import { getFormattedDate } from '../../../utilities'
 
 const PostPage = () => {
-  const { post } = usePostContext()
-
-  if (!post) return <h1>post</h1>
+  const { post } = useOutletContext<{ post: PostModel }>()
 
   return (
     <article className={styles.post}>
-      <header>
+      <header className={styles.postHeader}>
         <img
+          className={styles.postUserAvatar}
           src={`https://avatars.githubusercontent.com/u/${post.user.id}`}
           alt={`${post.user.name} GitHub Avatar`}
           width={40}
           height={40}
         />
-        <h1>{post.user.name}</h1>
+        <h1 className={styles.postUserName}>{post.user.name}</h1>
       </header>
-      <main>
-        <p>{post.content}</p>
+      <main className={styles.postMain}>
+        <p className={styles.postContent}>{post.content}</p>
       </main>
-      <footer></footer>
+      <footer className={styles.postFooter}>
+        <p className={styles.postDate}>{getFormattedDate(post.updatedAt)}</p>
+      </footer>
     </article>
   )
 }

@@ -4,7 +4,7 @@ import Post from './models/post.model'
 import CreatePostInput from './dto/create-post.input'
 import { UseGuards } from '@nestjs/common'
 import AuthGuard from '../auth/auth.guard'
-import GetPostsArgs from './dto/get-posts.args'
+import GetPostArgs from './dto/get-post.args'
 
 @Resolver('Post')
 export default class PostsResolver {
@@ -20,7 +20,12 @@ export default class PostsResolver {
   }
 
   @Query(() => [Post])
-  async getPosts(@Args() getPostsArgs: GetPostsArgs) {
-    return this.postsService.findMany(getPostsArgs.parentId)
+  async getPosts() {
+    return this.postsService.findMany()
+  }
+
+  @Query(() => Post)
+  async getPost(@Args() getPostArgs: GetPostArgs) {
+    return this.postsService.findUnique(getPostArgs.id)
   }
 }

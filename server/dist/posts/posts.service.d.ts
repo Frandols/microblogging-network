@@ -14,7 +14,7 @@ export default class PostsService {
         userId: number;
         parentId: number | null;
     }, unknown> & {}>;
-    findMany(parentId: number): Promise<({
+    findMany(): Promise<({
         user: import("@prisma/client/runtime").GetResult<{
             id: number;
             name: string;
@@ -29,4 +29,31 @@ export default class PostsService {
         userId: number;
         parentId: number | null;
     }, unknown> & {})[]>;
+    findUnique(id: number): Promise<({
+        user: import("@prisma/client/runtime").GetResult<{
+            id: number;
+            name: string;
+        }, unknown> & {};
+        children: ({
+            user: import("@prisma/client/runtime").GetResult<{
+                id: number;
+                name: string;
+            }, unknown> & {};
+            _count: {
+                children: number;
+            };
+        } & import("@prisma/client/runtime").GetResult<{
+            id: number;
+            content: string;
+            updatedAt: Date;
+            userId: number;
+            parentId: number | null;
+        }, unknown> & {})[];
+    } & import("@prisma/client/runtime").GetResult<{
+        id: number;
+        content: string;
+        updatedAt: Date;
+        userId: number;
+        parentId: number | null;
+    }, unknown> & {}) | null>;
 }

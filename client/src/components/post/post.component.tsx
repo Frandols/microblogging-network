@@ -1,7 +1,6 @@
 import styles from './post.component.module.css'
 import PostModel from '@server/posts/models/post.model'
 import { Link, useNavigate } from 'react-router-dom'
-import { usePostContext } from '../../contexts'
 import CommentIcon from '../icons/comment.icon.component'
 import { getTimeDistance } from '../../utilities'
 
@@ -12,7 +11,6 @@ type PostProps = Pick<
 
 const Post = (post: PostProps) => {
   const navigate = useNavigate()
-  const { setPost } = usePostContext()
 
   return (
     <article className={styles.post}>
@@ -26,20 +24,14 @@ const Post = (post: PostProps) => {
       <div className={styles.postBody}>
         <header className={styles.postBodyHeader}>
           <div className={styles.postBodyHeaderInfo}>
-            <Link
-              className={styles.postBodyHeaderInfoUser}
-              to={`/users/${post.user.id}`}
-            >
+            <Link className={styles.postUserName} to={`/users/${post.user.id}`}>
               {post.user.name}
             </Link>
-            <p className={styles.postBodyHeaderInfoDate}>
-              {getTimeDistance(post.updatedAt)}
-            </p>
+            <p className={styles.postDate}>{getTimeDistance(post.updatedAt)}</p>
           </div>
           <button
-            className={styles.postBodyHeaderButton}
+            className={styles.postSeeCommentsButton}
             onClick={() => {
-              setPost(post)
               navigate(`/posts/${post.id}`)
             }}
           >
@@ -51,7 +43,7 @@ const Post = (post: PostProps) => {
         </main>
         <footer className={styles.postBodyFooter}>
           <button
-            className={styles.postBodyFooterAction}
+            className={styles.postAction}
             onClick={() => console.log('comment')}
           >
             <CommentIcon width={18} height={18} />

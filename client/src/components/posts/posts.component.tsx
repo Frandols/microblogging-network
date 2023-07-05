@@ -1,16 +1,11 @@
 import Post from '../post/post.component'
-import { useParams } from 'react-router-dom'
-import { usePosts } from '../../hooks'
+import PostModel from '@server/posts/models/post.model'
 
-const Posts = () => {
-  const { postId } = useParams()
+type PostsProps = {
+  posts: PostModel[]
+}
 
-  const { loading, posts, error } = usePosts(postId || null)
-
-  if (loading) return <h1>Loading</h1>
-
-  if (error) return <h1>Error!</h1>
-
+const Posts = ({ posts }: PostsProps) => {
   return posts.map((post) => <Post key={post.id} {...post} />)
 }
 

@@ -34,13 +34,24 @@ let PostsService = class PostsService {
             },
         });
     }
-    async findMany(parentId) {
+    async findMany() {
         return this.prisma.post.findMany({
-            where: { parentId },
+            where: { parentId: null },
             include: {
                 user: true,
                 _count: {
                     select: { children: true },
+                },
+            },
+        });
+    }
+    async findUnique(id) {
+        return this.prisma.post.findUnique({
+            where: { id },
+            include: {
+                user: true,
+                children: {
+                    include: { user: true, _count: { select: { children: true } } },
                 },
             },
         });

@@ -8,16 +8,21 @@
   border-bottom: 1px solid var(--light-gray);
 }
 
-.post header {
+.postHeader {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
-.post header img {
+.postUserAvatar {
   border-radius: 50%;
 }
 
-.post footer {
+.postFooter {
   height: 1.5rem;
+}
+
+.postDate {
+  font-size: 0.875rem;
+  color: #808080;
 }

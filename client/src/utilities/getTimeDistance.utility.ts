@@ -11,6 +11,10 @@ const units = [
     label: 'h',
     getValue: (miliseconds: number) => miliseconds / (1000 * 60 * 60),
   },
+  {
+    label: 'd',
+    getValue: (miliseconds: number) => miliseconds / (1000 * 60 * 60 * 24),
+  },
 ]
 
 const getTimeDistance = (date: Date) => {

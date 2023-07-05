@@ -1,8 +1,25 @@
 import { gql } from '@apollo/client'
 
-const getPosts = (parentId: string | null) => gql`
-query GetPosts {
-  getPosts(parentId: ${parentId}) {
+const getPosts = () => gql`
+  query GetPosts {
+    getPosts {
+      id
+      content
+      updatedAt
+      user {
+        id
+        name
+      }
+      _count {
+        children
+      }
+    }
+  }
+`
+
+const getPost = (id: string) => gql`
+{
+  getPost(id: ${id}) {
     id
     content
     updatedAt
@@ -10,11 +27,20 @@ query GetPosts {
       id
       name
     }
-    _count {
-      children
+    children {
+      id
+      content
+      updatedAt
+      user {
+        id
+        name
+      }
+      _count {
+        children
+      }
     }
- }
+  }
 }
 `
 
-export { getPosts }
+export { getPosts, getPost }

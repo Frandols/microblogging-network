@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
-import { UserContextProvider, PostContextProvider } from './contexts'
+import { UserContextProvider } from './contexts'
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client'
 import { BrowserRouter } from 'react-router-dom'
 import { AppLayout } from './layouts/index.ts'
@@ -14,13 +14,11 @@ const client = new ApolloClient({
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <ApolloProvider client={client}>
     <UserContextProvider>
-      <PostContextProvider>
-        <AppLayout>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
-        </AppLayout>
-      </PostContextProvider>
+      <AppLayout>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </AppLayout>
     </UserContextProvider>
   </ApolloProvider>
 )

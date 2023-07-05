@@ -36,24 +36,24 @@
   gap: 0.5rem;
 }
 
-.postBodyHeaderInfoUser {
+.postUserName {
   color: #fff;
 }
 
-.postBodyHeaderInfoDate {
+.postDate {
   color: #808080;
   font-size: 0.875rem;
 }
 
-.postBodyHeaderButton {
+.postSeeCommentsButton {
   color: var(--primary);
 }
 
-.postBodyHeaderButton:hover {
+.postSeeCommentsButton:hover {
   text-decoration: underline;
 }
 
-.postBodyFooterAction {
+.postAction {
   height: 100%;
   display: flex;
   align-items: center;
@@ -62,11 +62,11 @@
   gap: 0.5rem;
 }
 
-.postBodyFooterAction svg {
+.postAction svg {
   fill: inherit;
 }
 
-.postBodyFooterAction:hover {
+.postAction:hover {
   color: var(--primary);
   fill: var(--primary);
 }
