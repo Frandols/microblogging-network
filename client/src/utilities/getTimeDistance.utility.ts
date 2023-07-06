@@ -20,7 +20,7 @@ const units = [
 const getTimeDistance = (date: Date) => {
   const miliseconds = new Date(date).getTime()
 
-  let result: string = `${miliseconds}ms`
+  let result = `${miliseconds}ms`
 
   for (let x = 0; x < units.length; x++) {
     const unit = units[x]
