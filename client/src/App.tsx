@@ -1,10 +1,6 @@
-import './App.css'
-import { useUserContext } from './contexts'
-import { useCodeDetection } from './hooks'
-import Posts from './components/posts/posts.component'
 import { Routes, Route, Navigate } from 'react-router-dom'
-import { PostsPage, PostPage } from './pages'
-import { PostsPageLayout } from './layouts'
+import { PostPage } from './pages'
+import { PostsLayout } from './layouts'
 
 function App() {
   /* useCodeDetection()
@@ -23,11 +19,11 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/posts" element={<PostsPage />}>
+      <Route path="/" element={<PostsLayout />}>
         <Route path="/posts/:postId" element={<PostPage />} />
+        <Route path="/users/:userId" element={<h1>User</h1>} />
       </Route>
-      <Route path="/users/:userId" element={<h1>User</h1>} />
-      <Route path="*" element={<Navigate to="/posts" />} />
+      <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   )
 }

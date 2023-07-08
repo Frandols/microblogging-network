@@ -1,36 +1,28 @@
-import { ApolloError, useQuery } from '@apollo/client'
-import { getPosts } from '../queries'
-import PostModel from '@server/posts/models/post.model'
+import { useParams } from 'react-router-dom'
+import { getQueryBasedOnParams } from '../utilities'
+import { useQuery } from '@apollo/client'
 
-type UsePosts =
-  | {
-      loading: true
-      parentPost: null
-      posts: null
-      error: undefined
-    }
-  | {
-      loading: false
-      parentPost: null
-      posts: null
-      error: ApolloError
-    }
-  | {
-      loading: false
-      posts: PostModel[]
-      error: undefined
-    }
+const usePosts = () => {
+  const params = useParams()
 
-const usePosts = (parentId: string | null) => {
-  const { loading, data, error } = useQuery<{
-    getPosts: PostModel[]
-  }>(getPosts(parentId))
+  const query = getQueryBasedOnParams(params)
+
+  const { loading, data, error } = useQuery(query)
+
+  if (loading)
+    return {
+      loading,
+      post: null,
+      posts: null,
+      error,
+    }
 
   return {
     loading,
-    posts: data ? data.getPosts : null,
+    post: data.getPost || null,
+    posts: data.getPosts || data.getPost.children,
     error,
-  } as UsePosts
+  }
 }
 
 export default usePosts

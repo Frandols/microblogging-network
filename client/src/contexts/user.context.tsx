@@ -1,5 +1,12 @@
-import { createContext, PropsWithChildren, useState, useContext } from 'react'
+import {
+  createContext,
+  PropsWithChildren,
+  useState,
+  useContext,
+  useEffect,
+} from 'react'
 import { getUser } from '../services'
+import { getToken } from '../services'
 
 type User = {
   name: string
@@ -34,6 +41,25 @@ const UserContextProvider = ({ children }: PropsWithChildren) => {
       localStorage.removeItem('token')
     }
   }
+
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+
+    if (!token) {
+      const params = new URLSearchParams(window.location.search)
+      const code = params.get('code')
+
+      if (!code) return
+
+      getToken(code).then((token) => setToken(token))
+
+      return
+    }
+
+    setToken(token)
+  }, [])
+
+  useEffect(() => console.log(user), [user])
 
   return (
     <userContext.Provider
