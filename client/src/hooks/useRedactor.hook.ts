@@ -12,7 +12,7 @@ interface UseRedactor {
 }
 
 const useRedactor = (
-  parentId?: string,
+  parentId: string | null,
   onFinishSubmission = () => {}
 ): UseRedactor => {
   const navigate = useNavigate()

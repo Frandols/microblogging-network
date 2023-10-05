@@ -21,7 +21,7 @@ const Redactor: FC<RedactorProps> = ({
     isContentValid,
     submit,
     submitting,
-  } = useRedactor(postBeingReplyed?.id, onFinishSubmission)
+  } = useRedactor(postBeingReplyed?.id || null, onFinishSubmission)
 
   if (user == null)
     return (

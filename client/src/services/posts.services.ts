@@ -125,7 +125,7 @@ interface CreatePostResult extends Pick<Post, 'id'> {}
 
 const createPost = async (
   content: string,
-  parentId?: string
+  parentId: string | null
 ): Promise<CreatePostResult> => {
   const response = await axios.post<{ data: { createPost: Post } }>(
     endpoint,
@@ -133,7 +133,7 @@ const createPost = async (
       query: `
           mutation {
             createPost(${
-              parentId !== undefined ? `parentId: "${parentId}", ` : ''
+              parentId !== null ? `parentId: "${parentId}", ` : ''
             }payload: { content: "${content}" }) {
               id
             }
