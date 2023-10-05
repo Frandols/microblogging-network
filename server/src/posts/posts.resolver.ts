@@ -53,7 +53,7 @@ export default class PostsResolver {
     filter: async ({ replyReceived }, _, context: { user: string }) => {
       if (replyReceived.parent === null) return false
 
-      //if (replyReceived.parent.userId === replyReceived.userId) return false
+      if (replyReceived.parent.userId === replyReceived.userId) return false
 
       return replyReceived.parent.userId === context.user
     },
