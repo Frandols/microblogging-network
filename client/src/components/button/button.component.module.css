@@ -1,21 +1,45 @@
 .button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
   cursor: pointer;
-  transition: border-color 0.25s;
+  border-radius: 0.5rem;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  font-weight: 700;
   width: 100%;
+  text-overflow: ellipsis;
+  color: var(--text-color);
 }
 
-.button:hover {
-  border-color: #646cff;
+.button svg {
+  display: block;
 }
 
-.button:focus,
-.button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+.buttonDisabled {
+  opacity: 50%;
+  pointer-events: none;
+}
+
+.button-md {
+  padding: var(--padding);
+  font-size: 1rem;
+  line-height: var(--line-height);
+  min-width: calc(var(--line-height) + var(--padding) * 2);
+}
+
+.button-sm {
+  font-size: 0.75rem;
+  padding: calc(var(--padding) * 0.75);
+  line-height: calc(var(--line-height) * 0.75);
+  min-width: calc(var(--line-height) * 0.75 + (var(--padding) * 0.75) * 2);
+}
+
+.button-primary {
+  background-color: var(--primary);
+}
+
+.button-secondary {
+  background-color: transparent;
+  border: 1px solid var(--border-color);
+  font-weight: normal;
+  min-width: 2.75rem;
 }

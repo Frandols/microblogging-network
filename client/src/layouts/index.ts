@@ -1,2 +1,1 @@
-export { default as AppLayout } from './app/app.layout'
-export { default as PostsLayout } from './posts/posts.layout'
+export { default as GlobalLayout } from './global/global.layout'

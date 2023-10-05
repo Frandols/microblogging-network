@@ -17,7 +17,7 @@ const units = [
   },
 ]
 
-const getTimeDistance = (date: Date) => {
+const getTimeDistance = (date: Date): string => {
   const miliseconds = new Date(date).getTime()
 
   let result = `${miliseconds}ms`

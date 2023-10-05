@@ -4,23 +4,25 @@
 
 """user"""
 type User {
-  id: Float!
+  id: String!
   name: String!
+  avatar: String!
+  posts: [Post!]!
 }
 
-type Count {
+type ChildrenCount {
   children: Float!
 }
 
 """post"""
 type Post {
-  id: Float!
+  id: String!
   content: String!
-  user: User!
   updatedAt: DateTime!
+  user: User!
   parent: Post
   children: [Post!]!
-  _count: Count!
+  _count: ChildrenCount!
 }
 
 """
@@ -29,15 +31,26 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 scalar DateTime
 
 type Query {
-  getPosts: [Post!]!
-  getPost(id: Int!): Post!
+  posts: [Post!]!
+  post(id: String!): Post!
+  deletePost(id: String!): Post!
+  user(id: String!): User!
+  me: User!
 }
 
 type Mutation {
-  createPost(createPostInput: CreatePostInput!): Post!
+  createPost(parentId: String, payload: CreatePostInput!): Post!
+  updatePost(id: String!, payload: UpdatePostInput!): Post!
 }
 
 input CreatePostInput {
   content: String!
-  parentId: Int
+}
+
+input UpdatePostInput {
+  content: String!
+}
+
+type Subscription {
+  replyReceived: Post!
 }

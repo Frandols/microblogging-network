@@ -1,15 +1,14 @@
-const getFormattedDate = (postDate: Date) => {
+const getFormattedDate = (postDate: Date): string => {
   const date = new Date(postDate)
-  const adjustedDate = new Date(
-    date.getTime() - date.getTimezoneOffset() * 60 * 1000
-  )
 
-  const hours = adjustedDate.getHours()
-  const minutes = adjustedDate.getMinutes()
+  const hours = date.getHours()
+  const minutes = date.getMinutes()
 
-  return `${hours}:${minutes} · ${adjustedDate.toLocaleDateString('en-us', {
+  return `${hours < 10 ? '0' : ''}${hours}:${
+    minutes < 10 ? '0' : ''
+  }${minutes} · ${date.toLocaleDateString('en-us', {
     day: 'numeric',
-    weekday: 'short',
+    month: 'short',
     year: 'numeric',
   })}`
 }

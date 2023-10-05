@@ -2,7 +2,7 @@ import { Field, ObjectType } from '@nestjs/graphql'
 import User from '../../users/models/user.model'
 
 @ObjectType()
-class Count {
+class ChildrenCount {
   @Field()
   children: number
 }
@@ -10,16 +10,16 @@ class Count {
 @ObjectType({ description: 'post' })
 export default class Post {
   @Field()
-  id: number
+  id: string
 
   @Field()
   content: string
 
-  @Field(() => User)
-  user: User
-
   @Field(() => Date)
   updatedAt: Date
+
+  @Field(() => User)
+  user: User
 
   @Field(() => Post, { nullable: true })
   parent: Post
@@ -27,6 +27,6 @@ export default class Post {
   @Field(() => [Post])
   children: Post[]
 
-  @Field(() => Count)
-  _count: Count
+  @Field(() => ChildrenCount)
+  _count: ChildrenCount
 }

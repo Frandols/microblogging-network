@@ -20,9 +20,10 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "paths": {
-      "@server/*": ["../server/src/*"]
+      "@/server/*": ["../server/src/*"],
+      "@/*": ["./src/*"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "./.eslintrc.cjs", "./vite.config.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

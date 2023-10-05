@@ -1,7 +1,7 @@
-import { Field, Int, ArgsType } from '@nestjs/graphql'
+import { ArgsType, Field } from '@nestjs/graphql'
 
 @ArgsType()
 export default class GetPostArgs {
-  @Field(() => Int)
-  id: number
+  @Field(() => String)
+  id: string
 }

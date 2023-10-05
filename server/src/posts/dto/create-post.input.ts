@@ -1,12 +1,10 @@
-import { InputType, Field, Int } from '@nestjs/graphql'
-import { MaxLength } from 'class-validator'
+import { Field, InputType } from '@nestjs/graphql'
+import { MaxLength, MinLength } from 'class-validator'
 
 @InputType()
 export default class CreatePostInput {
   @Field()
+  @MinLength(1)
   @MaxLength(140)
   content: string
-
-  @Field(() => Int, { nullable: true })
-  parentId: number
 }

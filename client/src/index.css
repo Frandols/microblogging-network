@@ -1,7 +1,14 @@
 :root {
-  --primary: #646cff;
-  --base-dark: #242424;
-  --light-gray: rgb(42, 42, 42);
+  --base: rgb(30, 30, 32);
+  --base-secondary: rgb(37, 37, 41);
+  --primary: rgb(100, 108, 255);
+  --danger: rgb(240, 113, 120);
+  --text-color: rgb(255, 255, 255);
+  --text-color-secondary: rgb(128, 128, 128);
+  --border-color: rgba(82, 82, 89, 0.322);
+  --padding: 0.625rem;
+  --line-height: 1.5rem;
+  --root-width: 64rem;
 }
 
 * {
@@ -12,29 +19,48 @@
 }
 
 body {
-  min-height: 100vh;
-  background-color: var(--base-dark);
+  background-color: var(--base);
 }
 
 #root {
-  width: 100%;
+  margin: auto;
+  max-width: var(--root-width);
+  height: 100dvh;
   display: grid;
-  grid-template-columns: 250px 500px 250px;
-  grid-template-rows: minmax(100vh, 1fr);
-  place-content: center;
+  grid-template-columns: 25% 50% 25%;
+  grid-template-rows: 1fr;
+  overflow: hidden;
+
+  @media (max-width: 1023px) {
+    max-width: calc(
+      var(--root-width) * 0.5 + (var(--line-height) + var(--padding) * 4) * 2
+    );
+    grid-template-columns: calc(var(--line-height) + var(--padding) * 4) 1fr calc(
+        var(--line-height) + var(--padding) * 4
+      );
+  }
+
+  @media (max-width: 637px) {
+    max-width: calc(
+      var(--root-width) * 0.5 + (var(--line-height) + var(--padding) * 4)
+    );
+    grid-template-columns: calc(var(--line-height) + var(--padding) * 4) 1fr;
+    grid-template-rows: 1fr calc(var(--line-height) + var(--padding) * 4);
+  }
 }
 
-a {
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
+input,
+button,
+textarea {
+  border: none;
+  outline: none;
 }
 
 button {
   background-color: transparent;
-  border: none;
-  outline: none;
   cursor: pointer;
+}
+
+::-webkit-scrollbar {
+  display: none;
 }

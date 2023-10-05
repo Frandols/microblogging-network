@@ -1,0 +1,36 @@
+.header {
+  padding: var(--padding);
+  backdrop-filter: blur(0.75rem);
+  -webkit-backdrop-filter: blur(0.75rem);
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-bottom: 1px solid var(--border-color);
+  display: grid;
+  grid-template-columns: min-content 1fr;
+  gap: var(--padding);
+
+  .goBack {
+    width: var(--line-height);
+    height: var(--line-height);
+    display: grid;
+    place-content: center;
+
+    .icon {
+      color: var(--text-color);
+      width: calc(var(--line-height) * 0.675);
+      height: calc(var(--line-height) * 0.675);
+      stroke-width: 0.125rem;
+    }
+  }
+
+  .title {
+    color: var(--text-color);
+    font-size: 1.25rem;
+    line-height: var(--line-height);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+}

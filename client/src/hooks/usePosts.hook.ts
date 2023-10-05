@@ -1,28 +1,46 @@
-import { useParams } from 'react-router-dom'
-import { getQueryBasedOnParams } from '../utilities'
-import { useQuery } from '@apollo/client'
+import { getPosts, type GetPostsResult } from '@/services'
+import { useCallback, useEffect, useState } from 'react'
 
-const usePosts = () => {
-  const params = useParams()
-
-  const query = getQueryBasedOnParams(params)
-
-  const { loading, data, error } = useQuery(query)
-
-  if (loading)
-    return {
-      loading,
-      post: null,
-      posts: null,
-      error,
+type UsePosts = () =>
+  | {
+      posts: GetPostsResult
+      loading: false
+      error: null
+    }
+  | {
+      error: string
+      loading: false
+      posts: null
+    }
+  | {
+      loading: true
+      posts: null
+      error: null
     }
 
-  return {
-    loading,
-    post: data.getPost || null,
-    posts: data.getPosts || data.getPost.children,
-    error,
-  }
+const usePosts: UsePosts = () => {
+  const [posts, setPosts] = useState<GetPostsResult | null>(null)
+  const [error, setError] = useState<string | null>(null)
+
+  const getPostsHandler = useCallback(async () => {
+    try {
+      const posts = await getPosts()
+
+      setPosts(posts)
+    } catch (error: any) {
+      setError(error)
+    }
+  }, [])
+
+  useEffect(() => {
+    getPostsHandler().catch(() => {})
+  }, [])
+
+  if (posts !== null) return { posts, loading: false, error: null }
+
+  if (error !== null) return { error, loading: false, posts }
+
+  return { loading: true, posts, error }
 }
 
 export default usePosts

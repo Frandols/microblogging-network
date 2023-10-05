@@ -1,0 +1,21 @@
+.loadingIndicator {
+  width: 100%;
+  padding: var(--padding);
+  display: flex;
+  justify-content: center;
+
+  .spinner {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    border: 0.25rem solid var(--text-color-secondary);
+    border-top-color: var(--text-color);
+    animation: spin 1.2s linear infinite;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -1,37 +1,68 @@
-import { Injectable } from '@nestjs/common'
-import PrismaService from 'src/prisma/prisma.service'
-import axios from 'axios'
+import { Injectable, NotFoundException } from '@nestjs/common'
+import { User } from '@prisma/client'
+import PrismaService from '../prisma/prisma.service'
 
-type GitHubAPIUserResponse = {
-  id: number
-  login: string
-  avatar_url: string
+export interface CreateUserPayload {
+  name: string
+  avatar: string
+  authProvider: string
+  authProviderUserId: string
 }
 
 @Injectable()
 export default class UsersService {
+  /**
+   * Create an users service.
+   *
+   * @param {PrismaService} prisma - The prisma service instance.
+   */
   constructor(private readonly prisma: PrismaService) {}
 
-  async getGitHubAPIUser(token: string) {
-    const response = await axios.get<GitHubAPIUserResponse>(
-      'https://api.github.com/user',
-      {
-        headers: { Authorization: `Bearer ${token}` },
+  /**
+   * Find an user.
+   *
+   * @param {string} id - The id for finding the user.
+   *
+   * @throws {NotFoundException} User not found
+   *
+   * @returns {Promise<User>} A promise with an user object.
+   */
+  async findUnique(id: string): Promise<User> {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+      include: {
+        posts: {
+          include: { user: true, _count: { select: { children: true } } },
+        },
       },
-    )
+    })
 
-    return response.data
+    if (!user) throw new NotFoundException()
+
+    return user
   }
 
-  async upsert(token: string) {
-    const gitHubUser = await this.getGitHubAPIUser(token)
-
-    await this.prisma.user.upsert({
-      where: { id: gitHubUser.id },
-      update: { name: gitHubUser.login },
+  /**
+   * Upsert an user.
+   *
+   * @param {CreateUserPayload} payload - The payload for upserting the user.
+   *
+   * @returns {Promise<User>} A promise with an user object.
+   */
+  async upsert(payload: CreateUserPayload): Promise<User> {
+    return await this.prisma.user.upsert({
       create: {
-        id: gitHubUser.id,
-        name: gitHubUser.login,
+        name: payload.name,
+        avatar: payload.avatar,
+        authProvider: payload.authProvider,
+        authProviderUserId: payload.authProviderUserId,
+      },
+      update: { name: payload.name, avatar: payload.avatar },
+      where: {
+        authProvider_authProviderUserId: {
+          authProvider: payload.authProvider,
+          authProviderUserId: payload.authProviderUserId,
+        },
       },
     })
   }

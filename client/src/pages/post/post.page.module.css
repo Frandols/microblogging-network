@@ -1,0 +1,73 @@
+.postPage {
+  width: 100%;
+  height: 100%;
+  padding-top: calc(var(--padding) * 2 + var(--line-height));
+  overflow-y: scroll;
+  display: grid;
+  grid-template-rows: repeat(3, min-content);
+
+  .post {
+    display: grid;
+    grid-template-rows: calc(var(--line-height) * 2) auto var(--line-height);
+    gap: var(--padding);
+    padding: var(--padding);
+    border-bottom: 1px solid var(--border-color);
+
+    .header {
+      display: grid;
+      grid-template-columns: calc(var(--line-height) * 2) 1fr;
+      gap: var(--padding);
+
+      .avatar {
+        border-radius: 50%;
+        width: calc(var(--line-height) * 2);
+        height: calc(var(--line-height) * 2);
+      }
+
+      .name {
+        color: var(--text-color);
+        line-height: calc(var(--line-height) * 2);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+
+    .content {
+      line-height: var(--line-height);
+      color: var(--text-color);
+    }
+
+    .footer {
+      .date {
+        font-size: 0.875rem;
+        color: var(--text-color-secondary);
+        line-height: var(--line-height);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+
+  .noPostsIndicator {
+    display: grid;
+    place-content: center;
+    width: 100%;
+    height: 100%;
+    padding: var(--padding);
+
+    .title,
+    .subtitle {
+      text-align: center;
+    }
+
+    .title {
+      color: var(--text-color);
+    }
+
+    .subtitle {
+      color: var(--text-color-secondary);
+    }
+  }
+}

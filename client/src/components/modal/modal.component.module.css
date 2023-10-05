@@ -1,0 +1,33 @@
+.background {
+  width: 100dvw;
+  height: 100dvh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgb(0, 0, 0, 0.25);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+  padding: var(--padding);
+
+  .modal {
+    padding: 2.125rem 0 0 0;
+    position: relative;
+    background-color: var(--base);
+    border-radius: 0.5rem;
+    border: 1px solid var(--border-color);
+    width: 100%;
+    max-width: calc(var(--root-width) * 0.5);
+    overflow: scroll hidden;
+
+    .close {
+      width: 1.5rem;
+      height: 1.5rem;
+      position: absolute;
+      top: var(--padding);
+      left: var(--padding);
+      color: var(--text-color-secondary);
+    }
+  }
+}

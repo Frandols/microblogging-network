@@ -1,0 +1,32 @@
+.authenticator {
+  padding: var(--padding);
+
+  .strategy {
+    background-color: transparent;
+    display: inline-block;
+    width: 100%;
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    padding: var(--padding) var(--padding) var(--padding)
+      calc(var(--padding) * 2 + var(--line-height));
+    position: relative;
+    color: var(--text-color);
+    text-decoration: none;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    line-height: var(--line-height);
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    .logo {
+      width: var(--line-height);
+      height: var(--line-height);
+      position: absolute;
+      top: var(--padding);
+      left: var(--padding);
+    }
+  }
+}

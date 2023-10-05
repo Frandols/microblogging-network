@@ -1,0 +1,79 @@
+.identification {
+  width: 100%;
+  min-width: calc(var(--line-height) + var(--padding) * 2);
+  display: flex;
+  align-items: center;
+  padding: var(--padding);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  position: relative;
+  gap: calc(var(--line-height) - 0.125rem);
+
+  .avatar {
+    border-radius: 50%;
+    width: calc(var(--line-height) - 0.125rem);
+    height: calc(var(--line-height) - 0.125rem);
+  }
+
+  .name {
+    display: block;
+    font-size: 1rem;
+    color: var(--text-color);
+    white-space: no-wrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: calc(100% - calc((var(--line-height) - 0.125rem) * 4));
+    text-align: center;
+    line-height: calc(var(--line-height) - 0.125rem);
+  }
+
+  .toggle {
+    position: absolute;
+    top: var(--padding);
+    right: var(--padding);
+    width: calc(var(--line-height) - 0.125rem);
+    height: calc(var(--line-height) - 0.125rem);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-color-secondary);
+
+    .icon {
+      z-index: -1;
+    }
+  }
+
+  .options {
+    position: absolute;
+    top: calc(var(--padding) * 2 + var(--line-height) + var(--padding) * 0.5);
+    width: 16rem;
+    padding: var(--padding);
+    right: -1px;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border-color);
+    background-color: var(--base-secondary);
+    z-index: 1;
+
+    @media (max-width: 39.75rem) {
+      bottom: calc(
+        var(--padding) * 2 + var(--line-height) + var(--padding) * 0.5
+      );
+      left: -1px;
+      top: auto;
+      right: auto;
+    }
+
+    .option {
+      list-style: none;
+      border-radius: 0.25rem;
+      padding: 0 var(--padding);
+      color: #fff;
+      cursor: pointer;
+      line-height: calc(var(--line-height) - 0.125rem);
+
+      &:hover {
+        background-color: rgb(255, 255, 255, 0.025);
+      }
+    }
+  }
+}

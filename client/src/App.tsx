@@ -1,29 +1,62 @@
-import { Routes, Route, Navigate } from 'react-router-dom'
-import { PostPage } from './pages'
-import { PostsLayout } from './layouts'
+import { type Post } from '@/entities'
+import { AuthenticationGuard } from '@/guards'
+import { HomePage, NotificationsPage, PostPage, UserPage } from '@/pages'
+import { gql, useSubscription } from '@apollo/client'
+import { type FC } from 'react'
+import toast from 'react-hot-toast'
+import { Navigate, Route, Routes } from 'react-router-dom'
+import { useNotificationsStore } from './stores'
+import { NotificationToast } from './toasts'
 
-function App() {
-  /* useCodeDetection()
+const App: FC = () => {
+  const addNotification = useNotificationsStore(
+    (state) => state.addNotification
+  )
 
-  const { user } = useUserContext()
+  useSubscription(
+    gql`
+      subscription {
+        replyReceived {
+          id
+          content
+          user {
+            id
+            name
+            avatar
+          }
+        }
+      }
+    `,
+    {
+      onData: ({ data: { data } }) => {
+        const replyReceived = data.replyReceived as Post
 
-  if (user) return <img src={user.avatar} /> */
+        const post = {
+          id: replyReceived.id,
+          content: replyReceived.content,
+          user: {
+            id: replyReceived.user.id,
+            name: replyReceived.user.name,
+            avatar: replyReceived.user.avatar,
+          },
+        }
 
-  /* return (
-    <button>
-      <a href="https://github.com/login/oauth/authorize?client_id=55e0abec4b1c2e6cbb1a">
-        Log in with GitHub
-      </a>
-    </button>
-  ) */
+        addNotification({ post })
+
+        toast(<NotificationToast {...post} />)
+      },
+    }
+  )
 
   return (
     <Routes>
-      <Route path="/" element={<PostsLayout />}>
-        <Route path="/posts/:postId" element={<PostPage />} />
-        <Route path="/users/:userId" element={<h1>User</h1>} />
+      <Route path='/' element={<HomePage />} />
+      <Route path='/users/:userId' element={<UserPage />} />
+      <Route path='/posts/:postId' element={<PostPage />} />
+      <Route element={<AuthenticationGuard />}>
+        <Route path='/notifications' element={<NotificationsPage />} />
       </Route>
-      <Route path="*" element={<Navigate to="/" />} />
+      <Route path='*' element={<Navigate to='/' />} />
     </Routes>
   )
 }

@@ -1,0 +1,23 @@
+{
+	"name": "microblogging-web-application",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"install": "cd server && npm install && cd .. && cd client && npm install",
+		"dev": "concurrently \"cd server && npm run start:dev\" \"cd client && npm run dev\"",
+		"build": "cd server && npm run build && cd .. && cd client && npm run build",
+		"start": "cd server && npm start"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Frandols/nested-comments.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/Frandols/nested-comments/issues"
+	},
+	"homepage": "https://github.com/Frandols/nested-comments#readme"
+}

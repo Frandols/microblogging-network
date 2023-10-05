@@ -1,0 +1,30 @@
+.notificationToast {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: var(--padding);
+
+  .avatar {
+    border-radius: 50%;
+    width: var(--line-height);
+    height: var(--line-height);
+  }
+
+  .text {
+    color: var(--text-color);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: var(--line-height);
+  }
+
+  .link {
+    color: var(--primary);
+    font-weight: bold;
+    text-decoration: none;
+    line-height: var(--line-height);
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

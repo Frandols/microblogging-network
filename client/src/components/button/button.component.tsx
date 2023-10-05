@@ -1,10 +1,33 @@
-import { ButtonHTMLAttributes } from 'react'
+import { type ButtonHTMLAttributes, type FC } from 'react'
 import styles from './button.component.module.css'
 
-type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement>
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  loading?: boolean
+  disabled?: boolean
+  size?: 'sm' | 'md'
+  variant?: 'primary' | 'secondary'
+}
 
-const Button = ({ className, ...props }: ButtonProps) => {
-  return <button className={`${className} ${styles.button}`} {...props} />
+const Button: FC<ButtonProps> = ({
+  loading = false,
+  disabled = false,
+  size = 'md',
+  variant = 'primary',
+  className = '',
+  ...props
+}) => {
+  return (
+    <button
+      className={`${styles.button} ${
+        loading || disabled ? styles.buttonDisabled : ''
+      } ${styles[`button-${size}`]} ${className} ${
+        styles[`button-${variant}`]
+      }`}
+      {...props}
+    >
+      {loading ? 'Loading...' : props.children}
+    </button>
+  )
 }
 
 export default Button

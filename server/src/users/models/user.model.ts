@@ -1,10 +1,17 @@
-import { ObjectType, Field } from '@nestjs/graphql'
+import { Field, ObjectType } from '@nestjs/graphql'
+import Post from '../../posts/models/post.model'
 
 @ObjectType({ description: 'user' })
 export default class User {
   @Field()
-  id: number
+  id: string
 
   @Field()
   name: string
+
+  @Field()
+  avatar: string
+
+  @Field(() => [Post])
+  posts: Post[]
 }
