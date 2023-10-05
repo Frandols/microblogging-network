@@ -46,7 +46,7 @@
   .options {
     position: absolute;
     top: calc(var(--padding) * 2 + var(--line-height) + var(--padding) * 0.5);
-    width: 16rem;
+    width: calc(16rem - var(--padding) * 2);
     padding: var(--padding);
     right: -1px;
     border-radius: 0.5rem;
