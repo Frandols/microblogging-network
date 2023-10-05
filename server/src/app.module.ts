@@ -15,6 +15,7 @@ import UsersModule from './users/users.module'
       rootPath: join(__dirname, '..', '..', '..', 'client', 'dist'),
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
+      useGlobalPrefix: true,
       driver: ApolloDriver,
       autoSchemaFile: 'schema.gql',
       subscriptions: {

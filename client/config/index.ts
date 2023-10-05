@@ -1,10 +1,6 @@
 export default {
-  APIURL: `http://${import.meta.env.VITE_HOST}:${import.meta.env.VITE_PORT}`,
-  webSocketAPIURL: `ws://${import.meta.env.VITE_HOST}:${
-    import.meta.env.VITE_PORT
-  }`,
-  gitHubOAuthURL: `https://github.com/login/oauth/authorize?redirect_uri=http://${
-    import.meta.env.VITE_HOST
-  }:${import.meta.env.VITE_PORT}?provider=github`,
+  APIURL: `${window.location.protocol}//${window.location.hostname}/api`,
+  webSocketAPIURL: `ws://${window.location.hostname}/api`,
+  gitHubOAuthURL: `https://github.com/login/oauth/authorize?redirect_uri=${window.location.protocol}//${window.location.hostname}?provider=github`,
   gitHubClientID: import.meta.env.VITE_GITHUB_CLIENT_ID as string,
 }

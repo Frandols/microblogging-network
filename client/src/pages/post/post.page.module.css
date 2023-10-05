@@ -3,8 +3,6 @@
   height: 100%;
   padding-top: calc(var(--padding) * 2 + var(--line-height));
   overflow-y: scroll;
-  display: grid;
-  grid-template-rows: repeat(3, min-content);
 
   .post {
     display: grid;
@@ -53,8 +51,6 @@
   .noPostsIndicator {
     display: grid;
     place-content: center;
-    width: 100%;
-    height: 100%;
     padding: var(--padding);
 
     .title,
