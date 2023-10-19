@@ -44,9 +44,9 @@ export default class GoogleStrategy implements Strategy<'google'> {
             client_secret: config.googleClientSecret,
             code,
             redirect_uri: `${
-              process.env.NODE_ENV === 'production' ? 'https:' : 'http:'
-            }//${process.env.HOST || 'localhost'}${
-              process.env.NODE_ENV === 'production' ? '' : ':5173'
+              process.env.NODE_ENV === 'production'
+                ? `https://${process.env.HOST}`
+                : 'http://localhost:5173'
             }?provider=google`,
             grant_type: 'authorization_code',
           },
