@@ -16,7 +16,7 @@ type StrategyRecord = {
 
 const strategyRecord: StrategyRecord = {
   github: new GitHubStrategy(config.gitHubClientID, config.gitHubClientSecret),
-  google: new GoogleStrategy(config.googleClientID, config.gitHubClientSecret),
+  google: new GoogleStrategy(config.googleClientID, config.googleClientSecret),
 }
 
 @Injectable()
