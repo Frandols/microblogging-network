@@ -1,11 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { User } from '@prisma/client'
 import PrismaService from '../prisma/prisma.service'
+import { StrategyName } from '../tokens/tokens.service'
 
-export interface CreateUserPayload {
+export interface CreateUserPayload<T extends string> {
   name: string
   avatar: string
-  authProvider: string
+  authProvider: T
   authProviderUserId: string
 }
 
@@ -14,18 +15,18 @@ export default class UsersService {
   /**
    * Create an users service.
    *
-   * @param {PrismaService} prisma - The prisma service instance.
+   * @param prisma - The prisma service instance.
    */
   constructor(private readonly prisma: PrismaService) {}
 
   /**
    * Find an user.
    *
-   * @param {string} id - The id for finding the user.
+   * @param id - The id for finding the user.
    *
-   * @throws {NotFoundException} User not found
+   * @throws User not found.
    *
-   * @returns {Promise<User>} A promise with an user object.
+   * @returns A promise with an user object.
    */
   async findUnique(id: string): Promise<User> {
     const user = await this.prisma.user.findUnique({
@@ -45,11 +46,11 @@ export default class UsersService {
   /**
    * Upsert an user.
    *
-   * @param {CreateUserPayload} payload - The payload for upserting the user.
+   * @param payload - The payload for upserting the user.
    *
-   * @returns {Promise<User>} A promise with an user object.
+   * @returns A promise with an user object.
    */
-  async upsert(payload: CreateUserPayload): Promise<User> {
+  async upsert(payload: CreateUserPayload<StrategyName>): Promise<User> {
     return await this.prisma.user.upsert({
       create: {
         name: payload.name,

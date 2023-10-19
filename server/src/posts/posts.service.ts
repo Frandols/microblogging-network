@@ -17,11 +17,11 @@ export default class PostsService {
   /**
    * Create a post.
    *
-   * @param {CreatePostPayload} payload - The payload to create the post.
+   * @param payload - The payload to create the post.
    *
-   * @throws {NotFoundException} Parent not found
+   * @throws Parent not found.
    *
-   * @returns {Promise<Post>} A promise with a post object.
+   * @returns A promise with a post object.
    */
   async create(
     payload: CreatePostPayload,
@@ -53,7 +53,7 @@ export default class PostsService {
   /**
    * Find all posts.
    *
-   * @returns {Promise<Post[]>} A promise with a posts array.
+   * @returns A promise with a posts array.
    */
   async findMany(): Promise<Post[]> {
     return await this.prisma.post.findMany({
@@ -70,9 +70,11 @@ export default class PostsService {
   /**
    * Find a post.
    *
-   * @param {string} id - The id for finding the post.
+   * @param id - The id for finding the post.
    *
-   * @returns {Promise<Post>} A promise with a post object.
+   * @throws Post not found.
+   *
+   * @returns A promise with a post object.
    */
   async findUnique(id: string): Promise<Post> {
     const post = await this.prisma.post.findUnique({
@@ -85,7 +87,7 @@ export default class PostsService {
       },
     })
 
-    if (!post) throw new NotFoundException()
+    if (!post) throw new NotFoundException('Post not found')
 
     return post
   }
@@ -93,17 +95,17 @@ export default class PostsService {
   /**
    * Update a post.
    *
-   * @param {string} id - The id for finding the post to update.
+   * @param id - The id for finding the post to update.
    *
-   * @param {string} userId - An user id to check if the update action is authorized.
+   * @param userId - An user id to check if the update action is authorized.
    *
-   * @param {UpdatePostPayload} payload - The payload to update the post.
+   * @param payload - The payload to update the post.
    *
-   * @throws {NotFoundException} Post not found
+   * @throws Post not found.
    *
-   * @throws {UnauthorizedException} User unauthorized
+   * @throws User unauthorized.
    *
-   * @returns {Promise<Post>} A promise with a post object.
+   * @returns A promise with a post object.
    */
   async update(
     id: string,
@@ -126,15 +128,15 @@ export default class PostsService {
   /**
    * Delete a post.
    *
-   * @param {string} id - The id for finding the post to delete.
+   * @param id - The id for finding the post to delete.
    *
-   * @param {string} userId - An user id to check if the delete action is authorized.
+   * @param userId - An user id to check if the delete action is authorized.
    *
-   * @throws {NotFoundException} Post not found
+   * @throws Post not found.
    *
-   * @throws {UnauthorizedException} User unauthorized
+   * @throws User unauthorized.
    *
-   * @returns {Promise<Post>} A promise with a post object.
+   * @returns A promise with a post object.
    */
   async delete(id: string, userId: string): Promise<Post> {
     const post = await this.prisma.post.findUnique({ where: { id } })

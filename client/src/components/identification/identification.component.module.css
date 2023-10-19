@@ -16,6 +16,7 @@
   }
 
   .name {
+    height: var(--line-height);
     display: block;
     font-size: 1rem;
     color: var(--text-color);

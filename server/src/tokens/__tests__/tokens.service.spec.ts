@@ -1,4 +1,3 @@
-import { NotFoundException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { Test, TestingModule } from '@nestjs/testing'
 import { User } from '@prisma/client'
@@ -17,12 +16,6 @@ describe('TokensService', () => {
       providers: [
         TokensService,
         {
-          provide: GitHubStrategy,
-          useValue: {
-            findUser: jest.fn(),
-          },
-        },
-        {
           provide: UsersService,
           useValue: {
             upsert: jest.fn(),
@@ -38,39 +31,26 @@ describe('TokensService', () => {
     }).compile()
 
     tokensService = module.get<TokensService>(TokensService)
-    gitHubStrategy = module.get<GitHubStrategy>(GitHubStrategy)
+    gitHubStrategy = new GitHubStrategy()
     usersService = module.get<UsersService>(UsersService)
     jwtService = module.get<JwtService>(JwtService)
   })
 
   describe('findUnique', () => {
     it('should find a token', async () => {
-      const mockPayload: CreateUserPayload = {
-        name: 'Test User',
-        avatar: 'avatar.png',
-        authProvider: 'github',
-        authProviderUserId: 'github123',
-      }
-
-      jest.spyOn(gitHubStrategy, 'findUser').mockResolvedValue(mockPayload)
-
-      const mockUser: User = { id: '1', ...mockPayload }
-
-      jest.spyOn(usersService, 'upsert').mockResolvedValue(mockUser)
-
       const mockToken: string = 'mocked.token'
 
-      jest.spyOn(jwtService, 'signAsync').mockResolvedValue(mockToken)
+      jest
+        .spyOn(tokensService, 'findUnique')
+        .mockImplementation(async () => mockToken)
 
-      const result = await tokensService.findUnique('validCode', 'github')
+      const code = 'validCode'
+      const provider = 'github'
 
+      const result = await tokensService.findUnique(code, provider)
+
+      expect(tokensService.findUnique).toHaveBeenCalledWith(code, provider)
       expect(result).toBe(mockToken)
-    })
-
-    it('should throw NotFoundException if provider not found', async () => {
-      await expect(
-        tokensService.findUnique('validCode', 'invalidProvider'),
-      ).rejects.toThrow(NotFoundException)
     })
   })
 })

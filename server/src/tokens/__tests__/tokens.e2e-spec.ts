@@ -4,7 +4,6 @@ import { Test, TestingModule } from '@nestjs/testing'
 import * as request from 'supertest'
 import PrismaModule from '../../prisma/prisma.module'
 import UsersService from '../../users/users.service'
-import GitHubStrategy from '../strategies/github.strategy'
 import TokensController from '../tokens.controller'
 import TokensService from '../tokens.service'
 
@@ -16,7 +15,7 @@ describe('TokensController (e2e)', () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [PrismaModule],
       controllers: [TokensController],
-      providers: [TokensService, UsersService, JwtService, GitHubStrategy],
+      providers: [TokensService, UsersService, JwtService],
     }).compile()
 
     app = moduleFixture.createNestApplication()

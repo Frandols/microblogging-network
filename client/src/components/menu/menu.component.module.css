@@ -62,7 +62,6 @@
           overflow: hidden;
           text-overflow: ellipsis;
           line-height: var(--line-height);
-          font-weight: 400;
           font-size: 1rem;
         }
       }

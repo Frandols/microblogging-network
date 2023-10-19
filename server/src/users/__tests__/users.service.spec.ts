@@ -64,7 +64,7 @@ describe('UsersService', () => {
 
   describe('upsert', () => {
     it('should upsert a user', async () => {
-      const mockPayload: CreateUserPayload = {
+      const mockPayload: CreateUserPayload<'github'> = {
         name: 'Test User',
         avatar: 'avatar.png',
         authProvider: 'github',

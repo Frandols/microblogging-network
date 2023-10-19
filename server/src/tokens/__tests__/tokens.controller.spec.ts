@@ -30,9 +30,9 @@ describe('TokensController', () => {
       jest.spyOn(tokensService, 'findUnique').mockResolvedValue(mockToken)
 
       const validCode: string = 'validCode'
-      const validProvider: string = 'github'
+      const validProvider = 'github'
 
-      const result = await tokensController.findUnique(validCode, validProvider)
+      const result = await tokensController.findUnique(validCode, 'github')
 
       expect(result).toEqual(mockToken)
       expect(tokensService.findUnique).toHaveBeenCalledWith(

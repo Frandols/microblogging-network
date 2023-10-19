@@ -20,7 +20,9 @@ const useUserStore = create<UserStoreState>((set) => {
           localStorage.setItem('token', token)
           window.location.reload()
         })
-        .catch(() => {})
+        .catch(() => {
+          window.location.search = ''
+        })
     }
   } else {
     getMe(token)

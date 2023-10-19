@@ -1,50 +1,56 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import UsersService from '../users/users.service'
+import Strategy from './interfaces/strategy.interface'
 import GitHubStrategy from './strategies/github.strategy'
+import GoogleStrategy from './strategies/google.strategy'
+
+const strategiesNames = ['github', 'google'] as const
+
+export type StrategyName = (typeof strategiesNames)[number]
+
+type StrategyRecord = {
+  [K in StrategyName]: Strategy<K>
+}
+
+const strategyRecord: StrategyRecord = {
+  github: new GitHubStrategy(),
+  google: new GoogleStrategy(),
+}
 
 @Injectable()
 export default class TokensService {
   /**
    * Create a tokens service.
    *
-   * @param {GitHubStrategy} gitHubStrategy - The GitHub strategy instance.
+   * @param gitHubStrategy - The GitHub strategy instance.
    *
-   * @param {UsersService} usersService - The users service instance.
+   * @param googleStrategy - The Google strategy instance.
    *
-   * @param {JwtService} jwtService - The JWT service instance.
+   * @param usersService - The users service instance.
+   *
+   * @param jwtService - The JWT service instance.
    */
   constructor(
-    private readonly gitHubStrategy: GitHubStrategy,
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
   ) {}
 
   /**
    * Find a token.
-   * @param {string} code - The provided code for finding the token.
    *
-   * @param {string} provider - The provider name for selecting a strategy.
+   * @param code - The provided code for finding the token.
    *
-   * @throws {NotFoundException} Provider not found.
+   * @param provider - The provider name for selecting a strategy.
    *
-   * @returns {Promise<string>} A promise with a token string.
+   * @throws Provider not found.
+   *
+   * @returns A promise with a token string.
    */
-  async findUnique(code: string, provider: string) {
-    let payload: {
-      name: string
-      avatar: string
-      authProvider: string
-      authProviderUserId: string
-    }
+  async findUnique(code: string, provider: StrategyName) {
+    const strategy = strategyRecord[provider]
 
-    switch (provider) {
-      case 'github':
-        payload = await this.gitHubStrategy.findUser(code)
-        break
-      default:
-        throw new NotFoundException('Provider not found')
-    }
+    const payload = await strategy.findUser(code)
 
     const user = await this.usersService.upsert(payload)
 

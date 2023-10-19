@@ -1,5 +1,8 @@
 .authenticator {
   padding: var(--padding);
+  display: flex;
+  flex-direction: column;
+  gap: var(--padding);
 
   .strategy {
     background-color: transparent;
