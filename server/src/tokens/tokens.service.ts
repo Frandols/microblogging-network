@@ -1,31 +1,28 @@
 import { Injectable } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
+import config from '../../config'
 import UsersService from '../users/users.service'
 import Strategy from './interfaces/strategy.interface'
 import GitHubStrategy from './strategies/github.strategy'
 import GoogleStrategy from './strategies/google.strategy'
 
-const strategiesNames = ['github', 'google'] as const
+const strategyNames = ['github', 'google'] as const
 
-export type StrategyName = (typeof strategiesNames)[number]
+export type StrategyName = (typeof strategyNames)[number]
 
 type StrategyRecord = {
   [K in StrategyName]: Strategy<K>
 }
 
 const strategyRecord: StrategyRecord = {
-  github: new GitHubStrategy(),
-  google: new GoogleStrategy(),
+  github: new GitHubStrategy(config.gitHubClientID, config.gitHubClientSecret),
+  google: new GoogleStrategy(config.googleClientID, config.gitHubClientSecret),
 }
 
 @Injectable()
 export default class TokensService {
   /**
    * Create a tokens service.
-   *
-   * @param gitHubStrategy - The GitHub strategy instance.
-   *
-   * @param googleStrategy - The Google strategy instance.
    *
    * @param usersService - The users service instance.
    *

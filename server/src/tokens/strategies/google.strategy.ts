@@ -1,6 +1,5 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common'
+import { UnauthorizedException } from '@nestjs/common'
 import axios from 'axios'
-import config from '../../../config'
 import { CreateUserPayload } from '../../users/users.service'
 import Strategy from '../interfaces/strategy.interface'
 
@@ -22,8 +21,58 @@ interface GoogleAPIUserResponse {
   }[]
 }
 
-@Injectable()
 export default class GoogleStrategy implements Strategy<'google'> {
+  private client_id: string
+  private client_secret: string
+
+  /**
+   * Create a GitHub authentication strategy.
+   *
+   * @param client_id - The GitHub OAuth service client ID.
+   *
+   * @param client_secret - The GitHub OAuth service client secret.
+   */
+  constructor(client_id: string, client_secret: string) {
+    this.setClientID(client_id)
+    this.setClientSecret(client_secret)
+  }
+
+  /**
+   * Set GitHub OAuth service client ID.
+   *
+   * @param client_id - The GitHub OAuth service client ID.
+   */
+  private setClientID(client_id: string) {
+    this.client_id = client_id
+  }
+
+  /**
+   * Get GitHub OAuth service client ID.
+   *
+   * @returns The GitHub OAuth service client ID.
+   */
+  getClientID() {
+    return this.client_id
+  }
+
+  /**
+   * Set GitHub OAuth service client secret.
+   *
+   * @param client_secret - The GitHub OAuth service client secret.
+   */
+  private setClientSecret(client_secret: string) {
+    this.client_secret = client_secret
+  }
+
+  /**
+   * Get GitHub OAuth service client secret.
+   *
+   * @returns The GitHub OAuth service client secret.
+   */
+  getClientSecret() {
+    return this.client_secret
+  }
+
   /**
    * Find a Google's user token.
    *
@@ -40,8 +89,8 @@ export default class GoogleStrategy implements Strategy<'google'> {
         {},
         {
           params: {
-            client_id: config.googleClientID,
-            client_secret: config.googleClientSecret,
+            client_id: this.getClientID(),
+            client_secret: this.getClientSecret(),
             code,
             redirect_uri: `${
               process.env.NODE_ENV === 'production'
