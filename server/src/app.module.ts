@@ -11,9 +11,9 @@ import UsersModule from './users/users.module'
 
 @Module({
   imports: [
-    /* ServeStaticModule.forRoot({
+    ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', '..', '..', 'client', 'dist'),
-    }), */
+    }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       useGlobalPrefix: true,
       driver: ApolloDriver,
