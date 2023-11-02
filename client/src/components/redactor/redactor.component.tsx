@@ -1,37 +1,35 @@
 import Button from '@/components/button/button.component'
-import { type Post, type User } from '@/entities'
-import useRedactor from '@/hooks/useRedactor.hook'
-import { type FC } from 'react'
+import { type User } from '@/entities'
+import { FormEvent, TextareaHTMLAttributes, useState, type FC } from 'react'
 import styles from './redactor.component.module.css'
 
-interface RedactorProps {
-  user: Pick<User, 'id' | 'name' | 'avatar'>
-  postBeingReplyed?: (Pick<Post, 'id'> & { user: Pick<User, 'name'> }) | null
-  onFinishSubmission?: () => void
+interface RedactorProps
+  extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'onSubmit'> {
+  user: Pick<User, 'name' | 'avatar'>
+  onSubmit: (event: FormEvent<HTMLFormElement>) => Promise<void>
 }
 
-const Redactor: FC<RedactorProps> = ({
-  user,
-  postBeingReplyed,
-  onFinishSubmission,
-}) => {
-  const {
-    onTextareaChange,
-    charactersLeft,
-    isContentValid,
-    submit,
-    submitting,
-  } = useRedactor(postBeingReplyed?.id || null, onFinishSubmission)
+const Redactor: FC<RedactorProps> = ({ user, onSubmit, ...props }) => {
+  const [charactersLeft, setCharactersLeft] = useState<number>(
+    props.defaultValue ? 140 - props.defaultValue.toString().length : 140
+  )
+  const [submitting, setSubmitting] = useState<boolean>(false)
 
-  if (user == null)
-    return (
-      <div className={styles.unauthenticatedUserAdvice}>
-        <p className={styles.legend}>To create a post you need to sign in</p>
-      </div>
-    )
+  const isContentValid = charactersLeft >= 0 && charactersLeft < 140
 
   return (
-    <form className={styles.redactor} onSubmit={submit}>
+    <form
+      className={styles.redactor}
+      onSubmit={(form) => {
+        setSubmitting(true)
+
+        onSubmit(form).catch(() => {
+          setSubmitting(false)
+
+          form.currentTarget.reset()
+        })
+      }}
+    >
       <img
         className={styles.avatar}
         src={user.avatar}
@@ -42,15 +40,13 @@ const Redactor: FC<RedactorProps> = ({
       <section className={styles.body}>
         <textarea
           className={styles.textarea}
-          onChange={onTextareaChange}
+          onChange={(element) => {
+            setCharactersLeft(140 - element.target.value.length)
+          }}
           name='content'
           rows={2}
-          placeholder={
-            postBeingReplyed !== undefined && postBeingReplyed !== null
-              ? `Reply to ${postBeingReplyed.user.name}...`
-              : "What's on your mind?"
-          }
-        />
+          {...props}
+        ></textarea>
         <footer className={styles.footer}>
           <p
             className={styles.charactersLeft}

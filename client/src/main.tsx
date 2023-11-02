@@ -65,6 +65,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
             boxShadow: 'none',
             padding: 'var(--padding)',
           },
+          duration: 2000,
         }}
         position='bottom-center'
       />

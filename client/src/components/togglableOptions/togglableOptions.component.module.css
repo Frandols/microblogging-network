@@ -1,0 +1,48 @@
+.togglableOptions {
+  position: relative;
+  justify-self: end;
+
+  .toggler {
+    width: calc(var(--line-height));
+    height: calc(var(--line-height));
+    display: grid;
+    place-content: center;
+    color: var(--text-color-secondary);
+
+    .icon {
+      z-index: -1;
+    }
+  }
+
+  .options {
+    position: absolute;
+    width: calc(16rem - var(--padding) * 2);
+    padding: var(--padding);
+    border-radius: 0.5rem;
+    border: 1px solid var(--border-color);
+    background-color: var(--base-secondary);
+    z-index: 1;
+
+    .option {
+      list-style: none;
+      border-radius: 0.25rem;
+      padding: 0 var(--padding);
+      cursor: pointer;
+      line-height: calc(var(--line-height) - 0.125rem);
+
+      &:hover {
+        background-color: rgb(255, 255, 255, 0.025);
+      }
+    }
+  }
+
+  .options-bottom-left {
+    top: calc(100% + var(--padding) * 1.5);
+    right: calc(var(--padding) * -1 - 1px);
+  }
+
+  .options-top-right {
+    bottom: calc(100% + var(--padding) * 1.5);
+    left: calc(var(--padding) * -1 - 1px);
+  }
+}

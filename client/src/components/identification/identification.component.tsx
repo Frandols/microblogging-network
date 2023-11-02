@@ -1,7 +1,7 @@
+import { TogglableOptions } from '@/components'
 import { type User } from '@/entities'
 import { useUserStore } from '@/stores'
-import { useState, type FC } from 'react'
-import { HiEllipsisVertical } from 'react-icons/hi2'
+import { useEffect, useState, type FC } from 'react'
 import styles from './identification.component.module.css'
 
 interface IdentificationProps {
@@ -9,6 +9,8 @@ interface IdentificationProps {
 }
 
 const Identification: FC<IdentificationProps> = ({ user }) => {
+  const deleteUser = useUserStore((state) => state.deleteUser)
+
   return (
     <div className={styles.identification}>
       <img
@@ -17,39 +19,42 @@ const Identification: FC<IdentificationProps> = ({ user }) => {
         alt={`${user.name} GitHub Avatar`}
       />
       <h1 className={styles.name}>{user.name}</h1>
-      <OptionsToggler />
+      <DynamicallyPositionedDropdownOptions
+        options={[
+          {
+            children: 'Sign out',
+            onClick: deleteUser,
+            className: styles.signOutOption,
+          },
+        ]}
+      />
     </div>
   )
 }
 
-const OptionsToggler: FC = () => {
-  const [isVisible, setIsVisible] = useState<boolean>(false)
-  const deleteUser = useUserStore((state) => state.deleteUser)
+type DynamicallyPositionedDropdownOptionsProps = Pick<
+  typeof TogglableOptions extends React.FC<infer P> ? P : never,
+  'options'
+>
+
+const DynamicallyPositionedDropdownOptions: FC<
+  DynamicallyPositionedDropdownOptionsProps
+> = ({ options }) => {
+  const [showInTopRight, setShowInTopRight] = useState<boolean>(
+    window.innerWidth < 638
+  )
+
+  useEffect(() => {
+    window.addEventListener('resize', () => {
+      setShowInTopRight(window.innerWidth < 638)
+    })
+  }, [])
 
   return (
-    <>
-      <button
-        className={styles.toggle}
-        onClick={() => {
-          setIsVisible(!isVisible)
-        }}
-      >
-        <HiEllipsisVertical className={styles.icon} size={20} />
-      </button>
-      {isVisible ? (
-        <ul className={styles.options}>
-          <li
-            className={styles.option}
-            onClick={deleteUser}
-            style={{
-              color: 'var(--danger)',
-            }}
-          >
-            Log out
-          </li>
-        </ul>
-      ) : null}
-    </>
+    <TogglableOptions
+      options={options}
+      variant={showInTopRight ? 'top-right' : 'bottom-left'}
+    />
   )
 }
 

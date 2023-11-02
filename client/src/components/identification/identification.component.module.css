@@ -1,80 +1,48 @@
 .identification {
   width: 100%;
-  min-width: calc(var(--line-height) + var(--padding) * 2);
-  display: flex;
-  align-items: center;
-  padding: var(--padding);
+  min-width: calc(var(--line-height) * 3 + var(--padding) * 4);
+  display: grid;
+  grid-template-columns: var(--line-height) minmax(var(--line-height), auto) var(
+      --line-height
+    );
+  padding: calc(var(--padding) - 1px) calc(var(--padding) - 1px);
   border: 1px solid var(--border-color);
   border-radius: 0.5rem;
   position: relative;
-  gap: calc(var(--line-height) - 0.125rem);
+  gap: calc(var(--padding) - 1px);
 
   .avatar {
     border-radius: 50%;
-    width: calc(var(--line-height) - 0.125rem);
-    height: calc(var(--line-height) - 0.125rem);
+    width: var(--line-height);
+    height: var(--line-height);
   }
 
   .name {
-    height: var(--line-height);
     display: block;
     font-size: 1rem;
     color: var(--text-color);
-    white-space: no-wrap;
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    width: calc(100% - calc((var(--line-height) - 0.125rem) * 4));
     text-align: center;
-    line-height: calc(var(--line-height) - 0.125rem);
+    line-height: var(--line-height);
   }
 
-  .toggle {
-    position: absolute;
-    top: var(--padding);
-    right: var(--padding);
-    width: calc(var(--line-height) - 0.125rem);
-    height: calc(var(--line-height) - 0.125rem);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: var(--text-color-secondary);
+  @media (max-width: 1024px) {
+    min-width: calc(var(--line-height) + var(--padding) * 2);
 
-    .icon {
-      z-index: -1;
+    .avatar {
+      position: absolute;
+      left: calc(var(--padding) - 1px);
+      top: calc(var(--padding) - 1px);
+    }
+
+    .name {
+      display: none;
     }
   }
 
-  .options {
-    position: absolute;
-    top: calc(var(--padding) * 2 + var(--line-height) + var(--padding) * 0.5);
-    width: calc(16rem - var(--padding) * 2);
-    padding: var(--padding);
-    right: -1px;
-    border-radius: 0.5rem;
-    border: 1px solid var(--border-color);
-    background-color: var(--base-secondary);
-    z-index: 1;
-
-    @media (max-width: 39.75rem) {
-      bottom: calc(
-        var(--padding) * 2 + var(--line-height) + var(--padding) * 0.5
-      );
-      left: -1px;
-      top: auto;
-      right: auto;
-    }
-
-    .option {
-      list-style: none;
-      border-radius: 0.25rem;
-      padding: 0 var(--padding);
-      color: #fff;
-      cursor: pointer;
-      line-height: calc(var(--line-height) - 0.125rem);
-
-      &:hover {
-        background-color: rgb(255, 255, 255, 0.025);
-      }
-    }
+  .signOutOption {
+    color: var(--danger);
   }
 }

@@ -1,7 +1,9 @@
-import { Authenticator, Button, Redactor } from '@/components'
+import { Button, Redactor } from '@/components'
+import { createPost } from '@/services'
 import { useUserStore } from '@/stores'
 import useModalStore from '@/stores/modal.store'
 import { useEffect, useState, type FC } from 'react'
+import toast from 'react-hot-toast'
 import {
   HiBell,
   HiHome,
@@ -11,13 +13,17 @@ import {
   HiOutlineUser,
   HiUser,
 } from 'react-icons/hi2'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import styles from './menu.component.module.css'
 
 const Menu: FC = () => {
   const user = useUserStore((state) => state.user)
   const { pathname } = useLocation()
-  const openModal = useModalStore((state) => state.openModal)
+  const { openModal, closeModal } = useModalStore((state) => ({
+    openModal: state.openModal,
+    closeModal: state.closeModal,
+  }))
+  const navigate = useNavigate()
 
   return (
     <nav className={styles.menu}>
@@ -98,19 +104,47 @@ const Menu: FC = () => {
       <Button
         className={styles.redactorToggler}
         onClick={() => {
-          openModal(
-            user !== null ? <Redactor user={user} /> : <Authenticator />
-          )
+          if (user !== null)
+            openModal(
+              <Redactor
+                user={user}
+                onSubmit={async (event) => {
+                  event.preventDefault()
+
+                  const data = new FormData(event.currentTarget)
+                  const contentEntry = data.get('content')
+
+                  if (!contentEntry) return
+
+                  const content = contentEntry.toString()
+
+                  createPost(content, null)
+                    .then((post) => {
+                      toast.success(`Successfully created post: "${content}"`)
+
+                      setTimeout(() => {
+                        closeModal()
+
+                        navigate(`/posts/${post.id}`)
+                      }, 2000)
+                    })
+                    .catch((error) => {
+                      toast.error(error.message)
+                    })
+                }}
+                placeholder="What's on your mind?"
+              />
+            )
         }}
         disabled={user === null}
       >
-        <RedactionModalTogglerLabel />
+        <RedactionModalTogglerContent />
       </Button>
     </nav>
   )
 }
 
-const RedactionModalTogglerLabel: FC = () => {
+const RedactionModalTogglerContent: FC = () => {
   const [showIcon, setShowIcon] = useState<boolean>(window.innerWidth < 1024)
 
   useEffect(() => {

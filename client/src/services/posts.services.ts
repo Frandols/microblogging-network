@@ -154,4 +154,63 @@ const createPost = async (
   }
 }
 
-export { createPost, getPost, getPosts }
+interface UpdatePostResult extends Pick<Post, 'id'> {}
+
+const updatePost = async (
+  postId: string,
+  payload: { content: string }
+): Promise<UpdatePostResult> => {
+  const response = await axios.post<{ data: { updatePost: Post } }>(
+    endpoint,
+    {
+      query: `
+        mutation {
+          updatePost(id: "${postId}", payload: { content: "${payload.content}" }) {
+            id
+          }
+        }
+      `,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token') as string}`,
+      },
+    }
+  )
+
+  if (response.status !== 200) throw new Error(response.statusText)
+
+  return {
+    id: response.data.data.updatePost.id,
+  }
+}
+
+interface DeletePostResult extends Pick<Post, 'content'> {}
+
+const deletePost = async (postId: string): Promise<DeletePostResult> => {
+  const response = await axios.post<{ data: { deletePost: Post } }>(
+    endpoint,
+    {
+      query: `
+        {
+          deletePost(id: "${postId}") {
+            content
+          }
+        }
+      `,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token') as string}`,
+      },
+    }
+  )
+
+  if (response.status !== 200) throw new Error(response.statusText)
+
+  return {
+    content: response.data.data.deletePost.content,
+  }
+}
+
+export { createPost, deletePost, getPost, getPosts, updatePost }

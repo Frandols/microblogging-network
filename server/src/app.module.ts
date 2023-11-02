@@ -11,13 +11,14 @@ import UsersModule from './users/users.module'
 
 @Module({
   imports: [
-    ServeStaticModule.forRoot({
+    /* ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', '..', '..', 'client', 'dist'),
-    }),
+    }), */
     GraphQLModule.forRoot<ApolloDriverConfig>({
       useGlobalPrefix: true,
       driver: ApolloDriver,
       autoSchemaFile: 'schema.gql',
+      playground: true,
       subscriptions: {
         'subscriptions-transport-ws': {
           onConnect: async (context: { Authorization: string }) => {
