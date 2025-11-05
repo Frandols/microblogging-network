@@ -17,7 +17,7 @@ import UsersModule from './users/users.module'
     GraphQLModule.forRoot<ApolloDriverConfig>({
       useGlobalPrefix: true,
       driver: ApolloDriver,
-      autoSchemaFile: 'schema.gql',
+      autoSchemaFile: true,
       playground: true,
       subscriptions: {
         'subscriptions-transport-ws': {
