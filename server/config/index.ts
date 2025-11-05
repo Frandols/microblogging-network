@@ -7,5 +7,6 @@ export default {
   gitHubClientSecret: String(process.env.GITHUB_CLIENT_SECRET),
   googleClientID: String(process.env.GOOGLE_CLIENT_ID),
   googleClientSecret: String(process.env.GOOGLE_CLIENT_SECRET),
-  jwtSecret: String(process.env.JWT_SECRET)
+  jwtSecret: String(process.env.JWT_SECRET),
+  clientOrigin: String(process.env.CLIENT_ORIGIN)
 }
