@@ -3,7 +3,7 @@ const currentURL = `${location.protocol}//${location.hostname}${
 }`
 
 const config = {
-  APIURL: import.meta.env.DEV ? 'http://localhost:3000/api' : '/api',
+  APIURL: import.meta.env.API_URL,
   webSocketAPIURL: import.meta.env.DEV
     ? 'ws://localhost:3000/api'
     : `wss://${location.hostname}/api`,
