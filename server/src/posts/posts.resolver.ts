@@ -7,8 +7,10 @@ import {
   Resolver,
   Subscription,
 } from '@nestjs/graphql'
+import { JwtService } from '@nestjs/jwt'
 import { User } from '@prisma/client'
 import { PubSub } from 'graphql-subscriptions'
+import config from '../../config'
 import TokensGuard from '../tokens/guards/tokens.guard'
 import CreatePostArgs from './dto/create-post.args'
 import CreatePostInput from './dto/create-post.input'
@@ -27,7 +29,25 @@ const pubSub = new PubSub()
 
 @Resolver('Post')
 export default class PostsResolver {
-  constructor(private readonly postsService: PostsService) {}
+  constructor(
+    private readonly postsService: PostsService,
+    private readonly jwtService: JwtService,
+  ) {}
+
+  private extractUserIdFromToken(request: any): string | undefined {
+    const [type, token] = request.headers.authorization?.split(' ') ?? []
+
+    if (type !== 'Bearer' || !token) return undefined
+
+    try {
+      const payload = this.jwtService.verify(token, {
+        secret: config.jwtSecret,
+      })
+      return payload.id
+    } catch {
+      return undefined
+    }
+  }
 
   @Mutation(() => Post)
   @UseGuards(TokensGuard)
@@ -63,13 +83,15 @@ export default class PostsResolver {
   }
 
   @Query(() => [Post])
-  posts() {
-    return this.postsService.findMany()
+  posts(@Context('req') request: any) {
+    const userId = this.extractUserIdFromToken(request)
+    return this.postsService.findMany(userId)
   }
 
   @Query(() => Post)
-  post(@Args() getPostArgs: GetPostArgs) {
-    return this.postsService.findUnique(getPostArgs.id)
+  post(@Args() getPostArgs: GetPostArgs, @Context('req') request: any) {
+    const userId = this.extractUserIdFromToken(request)
+    return this.postsService.findUnique(getPostArgs.id, userId)
   }
 
   @Mutation(() => Post)
@@ -89,5 +111,14 @@ export default class PostsResolver {
     @Context('req') context: ProtectedByTokensGuardRouteContext,
   ) {
     return this.postsService.delete(args.id, context.user.id)
+  }
+
+  @Mutation(() => Post)
+  @UseGuards(TokensGuard)
+  toggleLike(
+    @Args('postId') postId: string,
+    @Context('req') context: ProtectedByTokensGuardRouteContext,
+  ) {
+    return this.postsService.toggleLike(postId, context.user.id)
   }
 }

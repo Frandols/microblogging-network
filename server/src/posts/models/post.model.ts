@@ -5,6 +5,9 @@ import User from '../../users/models/user.model'
 class ChildrenCount {
   @Field()
   children: number
+
+  @Field()
+  likes: number
 }
 
 @ObjectType({ description: 'post' })
@@ -26,6 +29,9 @@ export default class Post {
 
   @Field(() => [Post])
   children: Post[]
+
+  @Field()
+  likedByMe: boolean
 
   @Field(() => ChildrenCount)
   _count: ChildrenCount

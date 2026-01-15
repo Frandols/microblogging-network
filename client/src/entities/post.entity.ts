@@ -7,7 +7,9 @@ export default interface Post {
   user: User
   parent: Post
   children: Post[]
+  likedByMe: boolean
   _count: {
     children: number
+    likes: number
   }
 }

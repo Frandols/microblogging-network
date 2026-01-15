@@ -18,6 +18,7 @@ model User {
   authProviderUserId  String    
 
   posts               Post[]
+  likes               Like[]
 
   @@unique([authProvider, authProviderUserId])
 }
@@ -33,4 +34,19 @@ model Post {
   parentId            String?
   parent              Post?     @relation("postToPost", fields: parentId, references: id, onDelete: Cascade)
   children            Post[]    @relation("postToPost")
+
+  likes               Like[]
+}
+
+model Like {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId])
 }

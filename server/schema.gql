@@ -12,6 +12,7 @@ type User {
 
 type ChildrenCount {
   children: Float!
+  likes: Float!
 }
 
 """post"""
@@ -22,6 +23,7 @@ type Post {
   user: User!
   parent: Post
   children: [Post!]!
+  likedByMe: Boolean!
   _count: ChildrenCount!
 }
 
@@ -41,6 +43,7 @@ type Query {
 type Mutation {
   createPost(parentId: String, payload: CreatePostInput!): Post!
   updatePost(id: String!, payload: UpdatePostInput!): Post!
+  toggleLike(postId: String!): Post!
 }
 
 input CreatePostInput {

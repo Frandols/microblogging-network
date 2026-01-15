@@ -72,8 +72,7 @@
       margin-top: 0rem;
 
       .action {
-        display: grid;
-        grid-template-columns: 1.25rem auto;
+        display: flex;
         align-items: center;
         color: var(--text-color-secondary);
         gap: 0.5rem;

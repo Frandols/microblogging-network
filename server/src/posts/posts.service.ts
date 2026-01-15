@@ -3,7 +3,7 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common'
-import { Post, User } from '@prisma/client'
+import { Like, Post, User } from '@prisma/client'
 import PrismaService from '../prisma/prisma.service'
 
 export type CreatePostPayload = Pick<Post, 'content' | 'userId' | 'parentId'>
@@ -55,16 +55,22 @@ export default class PostsService {
    *
    * @returns A promise with a posts array.
    */
-  async findMany(): Promise<Post[]> {
-    return await this.prisma.post.findMany({
+  async findMany(userId?: string): Promise<any[]> {
+    const posts = await this.prisma.post.findMany({
       where: { parentId: null },
       include: {
         user: true,
+        likes: userId ? { where: { userId } } : false,
         _count: {
-          select: { children: true },
+          select: { children: true, likes: true },
         },
       },
     })
+
+    return posts.map(({ likes, ...post }) => ({
+      ...post,
+      likedByMe: likes?.length > 0,
+    }))
   }
 
   /**
@@ -76,20 +82,33 @@ export default class PostsService {
    *
    * @returns A promise with a post object.
    */
-  async findUnique(id: string): Promise<Post> {
+  async findUnique(id: string, userId?: string): Promise<any> {
     const post = await this.prisma.post.findUnique({
       where: { id },
       include: {
         user: true,
+        likes: userId ? { where: { userId } } : false,
         children: {
-          include: { user: true, _count: { select: { children: true } } },
+          include: {
+            user: true,
+            likes: userId ? { where: { userId } } : false,
+            _count: { select: { children: true, likes: true } },
+          },
         },
+        _count: { select: { children: true, likes: true } },
       },
     })
 
     if (!post) throw new NotFoundException('Post not found')
 
-    return post
+    return {
+      ...post,
+      likedByMe: post.likes?.length > 0,
+      children: post.children.map(({ likes, ...child }) => ({
+        ...child,
+        likedByMe: likes?.length > 0,
+      })),
+    }
   }
 
   /**
@@ -147,5 +166,27 @@ export default class PostsService {
       throw new UnauthorizedException('User unauthorized')
 
     return await this.prisma.post.delete({ where: { id: post.id } })
+  }
+
+  async toggleLike(postId: string, userId: string): Promise<any> {
+    const post = await this.prisma.post.findUnique({ where: { id: postId } })
+
+    if (!post) throw new NotFoundException('Post not found')
+
+    const like = await this.prisma.like.findUnique({
+      where: { userId_postId: { postId, userId } },
+    })
+
+    if (like) {
+      await this.prisma.like.delete({
+        where: { userId_postId: { postId, userId } },
+      })
+    } else {
+      await this.prisma.like.create({
+        data: { postId, userId },
+      })
+    }
+
+    return this.findUnique(postId, userId)
   }
 }

@@ -2,6 +2,7 @@ import { Button, Redactor, TogglableOptions } from '@/components'
 import {
   createPost,
   deletePost,
+  toggleLike,
   updatePost,
   type GetPostsResult,
 } from '@/services'
@@ -9,7 +10,11 @@ import { useModalStore, useUserStore } from '@/stores'
 import { getTimeDistance } from '@/utilities'
 import { useState, type FC } from 'react'
 import toast from 'react-hot-toast'
-import { HiOutlineChatBubbleOvalLeft } from 'react-icons/hi2'
+import {
+  HiHeart,
+  HiOutlineChatBubbleOvalLeft,
+  HiOutlineHeart,
+} from 'react-icons/hi2'
 import { Link, useNavigate } from 'react-router-dom'
 import styles from './postItem.component.module.css'
 
@@ -20,6 +25,8 @@ const PostItem: FC<GetPostsResult[number]> = (post) => {
     closeModal: state.closeModal,
   }))
   const user = useUserStore((state) => state.user)
+  const [likedByMe, setLikedByMe] = useState(post.likedByMe)
+  const [likesCount, setLikesCount] = useState(post._count.likes)
 
   return (
     <>
@@ -106,6 +113,37 @@ const PostItem: FC<GetPostsResult[number]> = (post) => {
           </header>
           <p className={styles.content}>{post.content}</p>
           <footer className={styles.footer}>
+            <button
+              className={styles.action}
+              onClick={async (event) => {
+                event.stopPropagation()
+
+                if (!user) return
+
+                const previousLiked = likedByMe
+                const previousCount = likesCount
+
+                setLikedByMe(!previousLiked)
+                setLikesCount(
+                  previousLiked ? previousCount - 1 : previousCount + 1
+                )
+
+                try {
+                  await toggleLike(post.id)
+                } catch (error: any) {
+                  setLikedByMe(previousLiked)
+                  setLikesCount(previousCount)
+                  toast.error(error.message)
+                }
+              }}
+            >
+              {likedByMe ? (
+                <HiHeart size={20} color='#f91880' />
+              ) : (
+                <HiOutlineHeart size={20} />
+              )}
+              {likesCount !== 0 ? likesCount : null}
+            </button>
             <button
               className={styles.action}
               onClick={(event) => {
