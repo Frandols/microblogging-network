@@ -3,6 +3,7 @@ import { useEffect, useState, type FC } from 'react'
 import { HiOutlineUserCircle } from 'react-icons/hi2'
 import { Authenticator, Button, Identification } from '..'
 import styles from './aside.component.module.css'
+import TrendsList from './trends-list.component'
 
 const Aside: FC = () => {
   const openModal = useModalStore((state) => state.openModal)
@@ -22,6 +23,7 @@ const Aside: FC = () => {
           <AuthenticationModalTogglerLabel />
         </Button>
       )}
+      <TrendsList />
     </aside>
   )
 }

@@ -17,8 +17,9 @@ import CreatePostInput from './dto/create-post.input'
 import DeletePostArgs from './dto/delete-post.args'
 import GetPostArgs from './dto/get-post.args'
 import UpdatePostArgs from './dto/update-post.args'
-import UpdatePostInput from './dto/update-post.input'
+import { default as UpdatePostInput } from './dto/update-post.input'
 import Post from './models/post.model'
+import Trend from './models/trend.model'
 import PostsService from './posts.service'
 
 export interface ProtectedByTokensGuardRouteContext {
@@ -120,5 +121,16 @@ export default class PostsResolver {
     @Context('req') context: ProtectedByTokensGuardRouteContext,
   ) {
     return this.postsService.toggleLike(postId, context.user.id)
+  }
+
+  @Query(() => [Trend])
+  async trends() {
+    return this.postsService.getTrends()
+  }
+
+  @Query(() => [Post])
+  async postsByTrend(@Args('tag') tag: string, @Context('req') request: any) {
+    const userId = this.extractUserIdFromToken(request)
+    return this.postsService.findByTrend(tag, userId)
   }
 }

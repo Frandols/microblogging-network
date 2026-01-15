@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common'
 import { Like, Post, User } from '@prisma/client'
 import PrismaService from '../prisma/prisma.service'
+import Trend from './models/trend.model'
 
 export type CreatePostPayload = Pick<Post, 'content' | 'userId' | 'parentId'>
 
@@ -65,6 +66,7 @@ export default class PostsService {
           select: { children: true, likes: true },
         },
       },
+      orderBy: { updatedAt: 'desc' },
     })
 
     return posts.map(({ likes, ...post }) => ({
@@ -207,5 +209,55 @@ export default class PostsService {
     }
 
     return this.findUnique(postId, userId)
+  }
+
+  async getTrends(): Promise<Trend[]> {
+    const posts = await this.prisma.post.findMany({
+      take: 100,
+      orderBy: { updatedAt: 'desc' },
+      select: { content: true },
+    })
+
+    const trendsMap = new Map<string, number>()
+
+    posts.forEach((post) => {
+      const matches = post.content.match(/#\w+/g)
+      if (matches) {
+        matches.forEach((tag) => {
+          const normalizedTag = tag.toLowerCase()
+          trendsMap.set(normalizedTag, (trendsMap.get(normalizedTag) || 0) + 1)
+        })
+      }
+    })
+
+    return Array.from(trendsMap.entries())
+      .map(([tag, count]) => ({ tag, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 5)
+  }
+
+  async findByTrend(tag: string, userId?: string): Promise<any[]> {
+    const posts = await this.prisma.post.findMany({
+      where: {
+        content: {
+          contains: tag,
+          mode: 'insensitive',
+        },
+        parentId: null,
+      },
+      include: {
+        user: true,
+        likes: userId ? { where: { userId } } : false,
+        _count: {
+          select: { children: true, likes: true },
+        },
+      },
+      orderBy: { updatedAt: 'desc' },
+    })
+
+    return posts.map(({ likes, ...post }) => ({
+      ...post,
+      likedByMe: likes?.length > 0,
+    }))
   }
 }

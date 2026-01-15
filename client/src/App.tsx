@@ -1,6 +1,12 @@
 import { type Post } from '@/entities'
 import { AuthenticationGuard } from '@/guards'
-import { HomePage, NotificationsPage, PostPage, UserPage } from '@/pages'
+import {
+  HomePage,
+  NotificationsPage,
+  PostPage,
+  TrendsPage,
+  UserPage,
+} from '@/pages'
 import { gql, useSubscription } from '@apollo/client'
 import { type FC } from 'react'
 import toast from 'react-hot-toast'
@@ -53,6 +59,7 @@ const App: FC = () => {
       <Route path='/' element={<HomePage />} />
       <Route path='/users/:userId' element={<UserPage />} />
       <Route path='/posts/:postId' element={<PostPage />} />
+      <Route path='/trends/:tag' element={<TrendsPage />} />
       <Route element={<AuthenticationGuard />}>
         <Route path='/notifications' element={<NotificationsPage />} />
       </Route>
