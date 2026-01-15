@@ -5,12 +5,14 @@ import {
   PostItem,
   Redactor,
 } from '@/components'
+import { usePostLike } from '@/hooks'
 import usePost from '@/hooks/usePost.hook'
-import { createPost } from '@/services'
+import { createPost, type GetPostResult } from '@/services'
 import { useUserStore } from '@/stores'
 import { type FC } from 'react'
 import toast from 'react-hot-toast'
-import { useNavigate } from 'react-router-dom'
+import { HiHeart, HiOutlineHeart } from 'react-icons/hi2'
+import { Link, useNavigate } from 'react-router-dom'
 import { getFormattedDate } from '../../utilities'
 import styles from './post.page.module.css'
 
@@ -19,23 +21,63 @@ const PostPage: FC = () => {
     <>
       <Header title='Post' showGoBackButton />
       <section className={styles.postPage}>
-        <Post />
+        <PostContainer />
       </section>
     </>
   )
 }
 
-const Post: FC = () => {
-  const user = useUserStore((state) => state.user)
-  const navigate = useNavigate()
+const PostContainer: FC = () => {
   const { loading, post, error } = usePost()
 
   if (loading) return <LoadingIndicator />
 
   if (error !== null) return <ErrorIndicator />
 
+  if (!post) return <ErrorIndicator />
+
+  return <PostDetails post={post} />
+}
+
+interface PostDetailsProps {
+  post: GetPostResult
+}
+
+const PostDetails: FC<PostDetailsProps> = ({ post }) => {
+  const user = useUserStore((state) => state.user)
+  const navigate = useNavigate()
+
+  const { likedByMe, likesCount, handleToggleLike } = usePostLike({
+    postId: post.id,
+    initialLikedByMe: post.likedByMe,
+    initialLikesCount: post._count.likes,
+  })
+
   return (
     <>
+      {post.parents && post.parents.length > 0 && (
+        <section className={styles.parentsList}>
+          {post.parents.map((parent) => (
+            <Link
+              key={parent.id}
+              to={`/posts/${parent.id}`}
+              className={styles.parentItem}
+            >
+              <img
+                src={parent.user.avatar}
+                alt={parent.user.name}
+                className={styles.parentAvatar}
+              />
+              <p className={styles.parentContent}>
+                {parent.content.length > 50
+                  ? `${parent.content.slice(0, 50)}...`
+                  : parent.content}
+              </p>
+            </Link>
+          ))}
+          <div className={styles.connectorLine} />
+        </section>
+      )}
       <article className={styles.post}>
         <header className={styles.header}>
           <img
@@ -48,6 +90,23 @@ const Post: FC = () => {
         <p className={styles.content}>{post.content}</p>
         <footer className={styles.footer}>
           <p className={styles.date}>{getFormattedDate(post.updatedAt)}</p>
+          <button
+            className={styles.action}
+            onClick={async (event) => {
+              event.stopPropagation()
+
+              if (!user) return
+
+              handleToggleLike()
+            }}
+          >
+            {likedByMe ? (
+              <HiHeart size={20} color='#f91880' />
+            ) : (
+              <HiOutlineHeart size={20} />
+            )}
+            {likesCount !== 0 ? likesCount : null}
+          </button>
         </footer>
       </article>
       {user !== null ? (
@@ -63,7 +122,7 @@ const Post: FC = () => {
 
             const content = contentEntry.toString()
 
-            createPost(content, null)
+            createPost(content, post.id)
               .then((post) => {
                 toast.success(`Successfully created post: "${content}"`)
 

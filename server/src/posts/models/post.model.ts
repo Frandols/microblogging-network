@@ -30,6 +30,9 @@ export default class Post {
   @Field(() => [Post])
   children: Post[]
 
+  @Field(() => [Post])
+  parents: Post[]
+
   @Field()
   likedByMe: boolean
 

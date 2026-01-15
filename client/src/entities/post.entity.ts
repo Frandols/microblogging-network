@@ -5,11 +5,12 @@ export default interface Post {
   content: string
   updatedAt: Date
   user: User
-  parent: Post
+  parent: Post | null
   children: Post[]
   likedByMe: boolean
   _count: {
     children: number
     likes: number
   }
+  parents: Post[]
 }

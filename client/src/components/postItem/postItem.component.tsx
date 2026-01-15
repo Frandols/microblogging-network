@@ -1,8 +1,8 @@
 import { Button, Redactor, TogglableOptions } from '@/components'
+import { usePostLike } from '@/hooks'
 import {
   createPost,
   deletePost,
-  toggleLike,
   updatePost,
   type GetPostsResult,
 } from '@/services'
@@ -25,8 +25,11 @@ const PostItem: FC<GetPostsResult[number]> = (post) => {
     closeModal: state.closeModal,
   }))
   const user = useUserStore((state) => state.user)
-  const [likedByMe, setLikedByMe] = useState(post.likedByMe)
-  const [likesCount, setLikesCount] = useState(post._count.likes)
+  const { likedByMe, likesCount, handleToggleLike } = usePostLike({
+    postId: post.id,
+    initialLikedByMe: post.likedByMe,
+    initialLikesCount: post._count.likes,
+  })
 
   return (
     <>
@@ -120,21 +123,7 @@ const PostItem: FC<GetPostsResult[number]> = (post) => {
 
                 if (!user) return
 
-                const previousLiked = likedByMe
-                const previousCount = likesCount
-
-                setLikedByMe(!previousLiked)
-                setLikesCount(
-                  previousLiked ? previousCount - 1 : previousCount + 1
-                )
-
-                try {
-                  await toggleLike(post.id)
-                } catch (error: any) {
-                  setLikedByMe(previousLiked)
-                  setLikesCount(previousCount)
-                  toast.error(error.message)
-                }
+                handleToggleLike()
               }}
             >
               {likedByMe ? (

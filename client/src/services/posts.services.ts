@@ -78,6 +78,11 @@ export interface GetPostResult
       }
     }
   >
+  parents: Array<
+    Pick<Post, 'id' | 'content'> & {
+      user: Pick<User, 'id' | 'name' | 'avatar'>
+    }
+  >
 }
 
 const getPost = async (postId: string): Promise<GetPostResult> => {
@@ -98,6 +103,15 @@ const getPost = async (postId: string): Promise<GetPostResult> => {
               }
               _count {
                   likes
+              }
+              parents {
+                id
+                content
+                user {
+                  id
+                  name
+                  avatar
+                }
               }
               children {
                 id
@@ -140,6 +154,15 @@ const getPost = async (postId: string): Promise<GetPostResult> => {
     _count: {
       likes: response.data.data.post._count.likes,
     },
+    parents: response.data.data.post.parents.map((parent) => ({
+      id: parent.id,
+      content: parent.content,
+      user: {
+        id: parent.user.id,
+        name: parent.user.name,
+        avatar: parent.user.avatar,
+      },
+    })),
     children: response.data.data.post.children.map((child) => ({
       id: child.id,
       content: child.content,

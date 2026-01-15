@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
-import { User } from '@prisma/client'
+import { Post, User } from '@prisma/client'
 import PrismaService from '../prisma/prisma.service'
 import { StrategyName } from '../tokens/tokens.service'
 
@@ -28,19 +28,31 @@ export default class UsersService {
    *
    * @returns A promise with an user object.
    */
-  async findUnique(id: string): Promise<User> {
+  async findUnique(id: string): Promise<User & { posts: Post[] }> {
     const user = await this.prisma.user.findUnique({
       where: { id },
       include: {
         posts: {
-          include: { user: true, _count: { select: { children: true } } },
+          include: {
+            user: true,
+            likes: true,
+            _count: {
+              select: { children: true, likes: true },
+            },
+          },
         },
       },
     })
 
     if (!user) throw new NotFoundException()
 
-    return user
+    return {
+      ...user,
+      posts: user.posts.map(({ likes, ...post }) => ({
+        ...post,
+        likedByMe: likes.length > 0,
+      })),
+    }
   }
 
   /**

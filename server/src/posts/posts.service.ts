@@ -87,6 +87,7 @@ export default class PostsService {
       where: { id },
       include: {
         user: true,
+        parent: true,
         likes: userId ? { where: { userId } } : false,
         children: {
           include: {
@@ -101,9 +102,27 @@ export default class PostsService {
 
     if (!post) throw new NotFoundException('Post not found')
 
+    const parents = []
+    let parentId = post.parentId
+
+    while (parentId) {
+      const parent = await this.prisma.post.findUnique({
+        where: { id: parentId },
+        include: { user: true },
+      })
+
+      if (parent) {
+        parents.unshift(parent)
+        parentId = parent.parentId
+      } else {
+        parentId = null
+      }
+    }
+
     return {
       ...post,
       likedByMe: post.likes?.length > 0,
+      parents,
       children: post.children.map(({ likes, ...child }) => ({
         ...child,
         likedByMe: likes?.length > 0,
