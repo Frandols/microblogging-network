@@ -38,9 +38,9 @@ const getMe = async (token: string): Promise<GetMeResult> => {
 
 export interface GetUserResult extends Pick<User, 'id' | 'name' | 'avatar'> {
   posts: Array<
-    Pick<Post, 'id' | 'content' | 'updatedAt' | '_count'> & {
+    Pick<Post, 'id' | 'content' | 'updatedAt' | 'likedByMe'> & {
       user: Pick<User, 'id' | 'name' | 'avatar'>
-    }
+    } & { _count: { children: number; likes: number } }
   >
 }
 
@@ -61,8 +61,10 @@ const getUser = async (id: string): Promise<GetUserResult> => {
                   name
                   avatar
                 }
+                likedByMe
                 _count {
                   children
+                  likes
                 } 
             }
         }
@@ -89,7 +91,9 @@ const getUser = async (id: string): Promise<GetUserResult> => {
       },
       _count: {
         children: post._count.children,
+        likes: post._count.likes,
       },
+      likedByMe: post.likedByMe,
     })),
   }
 }
