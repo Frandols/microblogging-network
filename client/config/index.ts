@@ -3,10 +3,8 @@ const currentURL = `${location.protocol}//${location.hostname}${
 }`
 
 const config = {
-  APIURL: import.meta.env.DEV ? 'http://localhost:3000/api' : '/api',
-  webSocketAPIURL: import.meta.env.DEV
-    ? 'ws://localhost:3000/api'
-    : `wss://${location.hostname}/api`,
+  APIURL: import.meta.env.VITE_API_URL,
+  webSocketAPIURL: import.meta.env.VITE_WS_API_URL,
   gitHubOAuthURL: `https://github.com/login/oauth/authorize?client_id=${
     import.meta.env.VITE_GITHUB_CLIENT_ID
   }&redirect_uri=${currentURL}?provider=github`,

@@ -8,4 +8,5 @@ export default {
   googleClientID: String(process.env.GOOGLE_CLIENT_ID),
   googleClientSecret: String(process.env.GOOGLE_CLIENT_SECRET),
   jwtSecret: String(process.env.JWT_SECRET),
+  clientOrigin: String(process.env.CLIENT_ORIGIN)
 }
