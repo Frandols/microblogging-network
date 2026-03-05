@@ -8,6 +8,7 @@ import {
 import { usePosts } from '@/hooks'
 import { createPost } from '@/services'
 import { useUserStore } from '@/stores'
+import createdPostToast from '@/toasts/created-post.toast'
 import { type FC } from 'react'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
@@ -36,7 +37,7 @@ const HomePage: FC = () => {
 
               createPost(content, null)
                 .then((post) => {
-                  toast.success(`Successfully created post: "${content}"`)
+                  toast.success(createdPostToast(content))
 
                   setTimeout(() => {
                     navigate(`/posts/${post.id}`)

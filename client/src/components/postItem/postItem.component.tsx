@@ -7,6 +7,7 @@ import {
   type GetPostsResult,
 } from '@/services'
 import { useModalStore, useUserStore } from '@/stores'
+import createdPostToast from '@/toasts/created-post.toast'
 import { getTimeDistance } from '@/utilities'
 import { useState, type FC } from 'react'
 import toast from 'react-hot-toast'
@@ -81,7 +82,7 @@ const PostItem: FC<GetPostsResult[number]> = (post) => {
                             updatePost(post.id, { content })
                               .then((post) => {
                                 toast.success(
-                                  `Successfully updated post to: "${content}"`
+                                  `Successfully updated post to: "${content}"`,
                                 )
 
                                 setTimeout(() => {
@@ -95,7 +96,7 @@ const PostItem: FC<GetPostsResult[number]> = (post) => {
                               })
                           }}
                           defaultValue={post.content}
-                        />
+                        />,
                       )
                     },
                   },
@@ -106,7 +107,7 @@ const PostItem: FC<GetPostsResult[number]> = (post) => {
                       event.stopPropagation()
 
                       openModal(
-                        <PostDeletionConfirmationRequester post={post} />
+                        <PostDeletionConfirmationRequester post={post} />,
                       )
                     },
                   },
@@ -154,9 +155,7 @@ const PostItem: FC<GetPostsResult[number]> = (post) => {
 
                         createPost(content, post.id)
                           .then((post) => {
-                            toast.success(
-                              `Successfully created post: "${content}"`
-                            )
+                            toast.success(createdPostToast(content))
 
                             setTimeout(() => {
                               closeModal()
@@ -169,7 +168,7 @@ const PostItem: FC<GetPostsResult[number]> = (post) => {
                           })
                       }}
                       placeholder={`Reply to ${post.user.name}...`}
-                    />
+                    />,
                   )
               }}
             >

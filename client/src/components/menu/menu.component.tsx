@@ -2,6 +2,7 @@ import { Button, Redactor } from '@/components'
 import { createPost } from '@/services'
 import { useUserStore } from '@/stores'
 import useModalStore from '@/stores/modal.store'
+import createdPostToast from '@/toasts/created-post.toast'
 import { useEffect, useState, type FC } from 'react'
 import toast from 'react-hot-toast'
 import {
@@ -120,7 +121,7 @@ const Menu: FC = () => {
 
                   createPost(content, null)
                     .then((post) => {
-                      toast.success(`Successfully created post: "${content}"`)
+                      toast.success(createdPostToast(content))
 
                       setTimeout(() => {
                         closeModal()
@@ -133,7 +134,7 @@ const Menu: FC = () => {
                     })
                 }}
                 placeholder="What's on your mind?"
-              />
+              />,
             )
         }}
         disabled={user === null}

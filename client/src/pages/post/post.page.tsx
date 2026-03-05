@@ -9,6 +9,7 @@ import { usePostLike } from '@/hooks'
 import usePost from '@/hooks/usePost.hook'
 import { createPost, type GetPostResult } from '@/services'
 import { useUserStore } from '@/stores'
+import createdPostToast from '@/toasts/created-post.toast'
 import { type FC } from 'react'
 import toast from 'react-hot-toast'
 import { HiHeart, HiOutlineHeart } from 'react-icons/hi2'
@@ -124,7 +125,7 @@ const PostDetails: FC<PostDetailsProps> = ({ post }) => {
 
             createPost(content, post.id)
               .then((post) => {
-                toast.success(`Successfully created post: "${content}"`)
+                toast.success(createdPostToast(content))
 
                 setTimeout(() => {
                   navigate(`/posts/${post.id}`)

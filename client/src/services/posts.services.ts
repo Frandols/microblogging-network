@@ -41,7 +41,7 @@ const getPosts = async (): Promise<GetPostsResult> => {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token') as string}`,
       },
-    }
+    },
   )
 
   if (response.status !== 200) throw new Error(response.statusText)
@@ -63,8 +63,10 @@ const getPosts = async (): Promise<GetPostsResult> => {
   }))
 }
 
-export interface GetPostResult
-  extends Pick<Post, 'id' | 'content' | 'updatedAt' | 'likedByMe'> {
+export interface GetPostResult extends Pick<
+  Post,
+  'id' | 'content' | 'updatedAt' | 'likedByMe'
+> {
   user: Pick<User, 'id' | 'name' | 'avatar'>
   _count: {
     likes: number
@@ -136,7 +138,7 @@ const getPost = async (postId: string): Promise<GetPostResult> => {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token') as string}`,
       },
-    }
+    },
   )
 
   if (response.status !== 200) throw new Error(response.statusText)
@@ -185,7 +187,7 @@ interface CreatePostResult extends Pick<Post, 'id'> {}
 
 const createPost = async (
   content: string,
-  parentId: string | null
+  parentId: string | null,
 ): Promise<CreatePostResult> => {
   const response = await axios.post<{ data: { createPost: Post } }>(
     endpoint,
@@ -194,7 +196,7 @@ const createPost = async (
           mutation {
             createPost(${
               parentId !== null ? `parentId: "${parentId}", ` : ''
-            }payload: { content: "${content}" }) {
+            }payload: { content: """${content}""" }) {
               id
             }
           }
@@ -204,10 +206,14 @@ const createPost = async (
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token') as string}`,
       },
-    }
+    },
   )
 
-  if (response.status !== 200) throw new Error(response.statusText)
+  if (response.status !== 200) {
+    console.log(JSON.stringify(response))
+
+    throw new Error(response.statusText)
+  }
 
   return {
     id: response.data.data.createPost.id,
@@ -218,7 +224,7 @@ interface UpdatePostResult extends Pick<Post, 'id'> {}
 
 const updatePost = async (
   postId: string,
-  payload: { content: string }
+  payload: { content: string },
 ): Promise<UpdatePostResult> => {
   const response = await axios.post<{ data: { updatePost: Post } }>(
     endpoint,
@@ -235,7 +241,7 @@ const updatePost = async (
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token') as string}`,
       },
-    }
+    },
   )
 
   if (response.status !== 200) throw new Error(response.statusText)
@@ -263,7 +269,7 @@ const deletePost = async (postId: string): Promise<DeletePostResult> => {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token') as string}`,
       },
-    }
+    },
   )
 
   if (response.status !== 200) throw new Error(response.statusText)
@@ -299,7 +305,7 @@ const toggleLike = async (postId: string): Promise<ToggleLikeResult> => {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token') as string}`,
       },
-    }
+    },
   )
 
   if (response.status !== 200) throw new Error(response.statusText)
